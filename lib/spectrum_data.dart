@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/controller/amplifier_controller.dart';
-import 'package:spectrum_bar_chart/source/helper/configuration_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/pages/spectrum_bar_chart.dart';
+import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
+import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 
 class SpectrumDataChart extends StatefulWidget {
@@ -18,19 +20,19 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
 
 
   List<DSPointData> dsSpectrumDataPoints = [];
+  String deviceEui = '002926000002049a';
 
   @override
   Widget build(BuildContext context) {
     debugLogs("Current Screen ------> $runtimeType");
-    String apiUrl = 'https://192.168.44.176:3333/amps/002926000002049a/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=false';
+    String apiUrl = 'https://192.168.44.176:3333/amps/$deviceEui/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=false';
     Map<String, String> customHeaders = {};
     Map<String,String> body = {};
-    final dependencies = SpectrumBarChartDependencies(
+    final dependencies = AmpDsAlignmentDependencies(
       isSwitchOfAuto: true,
       apiUrl: apiUrl,
       customHeaders: customHeaders,
       bodyMap: body,
-      amplifierConfigurationHelper: AmplifierConfigurationHelper(ApiStatus.success),
       context: context,
       getSize: (size) => size,
       getMediumBoldFontWeight: () => FontWeight.normal,
@@ -39,7 +41,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
         child: Container(
           width: 100,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          margin: const EdgeInsets.symmetric(horizontal: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Colors.grey,
@@ -56,7 +57,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
         child: Container(
           width: 100,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          margin: const EdgeInsets.symmetric(horizontal: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Colors.grey,
@@ -68,8 +68,8 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
         ),
       ),
-      refBarColor: const Color.fromARGB(255, 255, 165, 0),
-      levelBarColor: const Color.fromARGB(255, 120, 0, 255),
+      refBarColor: AppColorConstants.colorRefChartBorder,
+      levelBarColor: AppColorConstants.colorLevelChartBorder,
       axisLabelTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 12,
@@ -102,8 +102,8 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
         color: Colors.grey,
         fontSize: 16,
       ),
-      refGraphColor: const Color.fromARGB(100, 255, 165, 0),
-      levelGraphColor: const Color.fromARGB(120, 179, 113, 255),
+      refGraphColor: AppColorConstants.colorRefChartBackGround,
+      levelGraphColor: AppColorConstants.colorLevelChartBackGround,
     );
     return GetBuilder(
       init: AmplifierController(),
@@ -114,7 +114,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SpectrumBarChart(
+            child: AmpDsAlignment(
               dataPoints: dsSpectrumDataPoints,
               dependencies: dependencies,
             ),

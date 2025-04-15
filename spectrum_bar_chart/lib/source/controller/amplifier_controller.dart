@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
-import 'package:spectrum_bar_chart/source/pages/spectrum_bar_chart.dart';
+import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 
 class AmplifierController extends GetxController {
   AmplifierRepository amplifierRepository = getIt.get<AmplifierRepository>();
