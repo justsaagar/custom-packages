@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/controller/amplifier_controller.dart';
+import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
 import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';

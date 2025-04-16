@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/controller/amplifier_controller.dart';
+import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';

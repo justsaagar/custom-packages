@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/controller/amplifier_controller.dart';
+import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
 import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
