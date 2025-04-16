@@ -12,7 +12,7 @@ import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 
 class AmplifierConfigurationHelper{
-  AmpDsAlignmentState state;
+  SpectrumChartState state;
   ApiStatus spectrumApiStatus = ApiStatus.initial;
   List<DSPointData> dsSpectrumDataPoints = [];
   String? dsSpectrumDataError;

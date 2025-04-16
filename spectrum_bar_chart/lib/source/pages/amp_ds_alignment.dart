@@ -90,21 +90,21 @@ class AmpDsAlignmentDependencies {
   });
 }
 
-class AmpDsAlignment extends StatefulWidget {
+class SpectrumChart extends StatefulWidget {
   final List<DSPointData> dataPoints;
   final AmpDsAlignmentDependencies dependencies;
 
-  const AmpDsAlignment({
+  const SpectrumChart({
     super.key,
     required this.dataPoints,
     required this.dependencies,
   });
 
   @override
-  State<AmpDsAlignment> createState() => AmpDsAlignmentState();
+  State<SpectrumChart> createState() => SpectrumChartState();
 }
 
-class AmpDsAlignmentState extends State<AmpDsAlignment> {
+class SpectrumChartState extends State<SpectrumChart> {
   AmplifierConfigurationHelper? amplifierConfigurationHelper;
   AmplifierController? amplifierController;
   double constraintsWidth = 0.0;
