@@ -111,7 +111,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SpectrumChart(
+            child: AmpDsAlignment(
               dataPoints: dsSpectrumDataPoints,
               dependencies: dependencies,
             ),
