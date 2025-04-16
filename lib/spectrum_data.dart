@@ -103,8 +103,8 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       levelGraphColor: AppColorConstants.colorLevelChartBackGround,
     );
     return GetBuilder(
-      init: AmplifierController(),
-      builder: (AmplifierController controller) {
+      init: DsAmplifierController(),
+      builder: (DsAmplifierController controller) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Spectrum Data Chart'),

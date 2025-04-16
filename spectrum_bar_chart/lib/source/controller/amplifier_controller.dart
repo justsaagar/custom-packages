@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
 import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 
-class AmplifierController extends GetxController {
+class DsAmplifierController extends GetxController {
   AmplifierRepository amplifierRepository = getIt.get<AmplifierRepository>();
 
   Future<Map<String, dynamic>> dsAutoAlignmentSpectrumData({

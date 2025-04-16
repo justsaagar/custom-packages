@@ -28,7 +28,7 @@ class AmplifierConfigurationHelper{
   AmplifierConfigurationHelper(this.state) {
     SchedulerBinding.instance.addPostFrameCallback(
           (timeStamp) async {
-            state.amplifierController = Get.put(AmplifierController());
+            state.dsAmplifierController = Get.put(DsAmplifierController());
       },
     );
   }
@@ -45,7 +45,7 @@ class AmplifierConfigurationHelper{
     dsSpectrumDifferenceTime = DateTime.now().difference(dsSpectrumOnTapTime!);
     dsSpectrumRefreshTimer=Timer(const Duration(seconds: 3), () {
       dsSpectrumIsShowText = false;
-      state.amplifierController?.update();
+      state.dsAmplifierController?.update();
     });
   }
   /// User Pass Url and header so call api and get Data in chart....  ////
@@ -60,9 +60,9 @@ class AmplifierConfigurationHelper{
     dsSpectrumDataError = null;
     downStreamAutoAlignmentError= null;
     spectrumApiStatus = ApiStatus.loading;
-    state.amplifierController?.update();
+    state.dsAmplifierController?.update();
     try {
-      await state.amplifierController
+      await state.dsAmplifierController
           ?.dsAutoAlignmentSpectrumData(
         apiUrl: apiUrl,
         context: context,
@@ -95,7 +95,7 @@ class AmplifierConfigurationHelper{
       dsSpectrumDataError= "Fetch Data Error";
     }finally{
       dsSpectrumGetDifferenceTime();
-      state.amplifierController?.update();
+      state.dsAmplifierController?.update();
     }
   }
 

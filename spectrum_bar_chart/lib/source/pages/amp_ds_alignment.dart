@@ -1,6 +1,5 @@
 library spectrum_bar_chart;
 
-import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/controller/amplifier_controller.dart';
 import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
-import 'package:spectrum_bar_chart/source/model/amplifier_status_item.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
@@ -106,7 +104,7 @@ class AmpDsAlignment extends StatefulWidget {
 
 class AmpDsAlignmentState extends State<AmpDsAlignment> {
   AmplifierConfigurationHelper? amplifierConfigurationHelper;
-  AmplifierController? amplifierController;
+  DsAmplifierController? dsAmplifierController;
   double constraintsWidth = 0.0;
   late ScreenLayoutType screenLayoutType;
   bool isSwitchOfAuto = true;
@@ -127,9 +125,9 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
   Widget build(BuildContext context) {
     amplifierConfigurationHelper ?? (amplifierConfigurationHelper = AmplifierConfigurationHelper(this));
     return GetBuilder(
-      init: AmplifierController(),
-      builder: (AmplifierController controller) {
-        amplifierController = controller;
+      init: DsAmplifierController(),
+      builder: (DsAmplifierController controller) {
+        dsAmplifierController = controller;
         return ScreenLayoutTypeBuilder(builder: (context, screenType, constraints) {
           screenLayoutType = screenType;
           constraintsWidth = constraints.maxWidth;
