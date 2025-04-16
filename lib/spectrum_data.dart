@@ -22,7 +22,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
   @override
   Widget build(BuildContext context) {
     debugLogs("Current Screen ------> $runtimeType");
-    String apiUrl = 'https://192.168.44.176:3333/amps/$deviceEui/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=false';
+    String apiUrl = 'https://192.168.44.176:3333/amps/$deviceEui/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=true';
     Map<String, String> customHeaders = {};
     Map<String,String> body = {};
     final dependencies = AmpDsAlignmentDependencies(
@@ -65,8 +65,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
         ),
       ),
-      refBarColor: AppColorConstants.colorRefChartBorder,
-      levelBarColor: AppColorConstants.colorLevelChartBorder,
       axisLabelTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 12,
@@ -79,16 +77,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       ),
       maximumYAxisValue: 50,
       minimumYAxisValue: 0,
-      referenceWidth: 10,
-      referenceBorder: const BorderRadius.only(
-        topLeft: Radius.circular(4),
-        topRight: Radius.circular(4),
-      ),
-      levelBarWidth: 10,
-      levelBarBorder: const BorderRadius.only(
-        topLeft: Radius.circular(4),
-        topRight: Radius.circular(4),
-      ),
       xAxisTitle: 'MHz',
       xAxisTitleStyle: const TextStyle(
         color: Colors.grey,
@@ -99,8 +87,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
         color: Colors.grey,
         fontSize: 16,
       ),
-      refGraphColor: AppColorConstants.colorRefChartBackGround,
-      levelGraphColor: AppColorConstants.colorLevelChartBackGround,
     );
     return GetBuilder(
       init: DsAmplifierController(),
@@ -111,9 +97,21 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: AmpDsAlignment(
-              dataPoints: dsSpectrumDataPoints,
-              dependencies: dependencies,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AmpDsAlignment(
+                    dependencies: dependencies,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: AmpDsAlignment(
+                    dependencies: dependencies,
+                  ),
+                ),
+              ],
             ),
           ),
         );

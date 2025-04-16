@@ -32,12 +32,6 @@ class AmpDsAlignmentDependencies {
   final Widget Function() revertButton;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
-  final double referenceWidth;
-  final BorderRadius referenceBorder;
-  final double levelBarWidth;
-  final BorderRadius levelBarBorder;
-  final Color refBarColor;
-  final Color levelBarColor;
   final TextStyle tooltipTextStyle;
   final TextStyle axisLabelTextStyle;
 
@@ -45,8 +39,6 @@ class AmpDsAlignmentDependencies {
   /// buildFLTitlesData ///
   final String xAxisTitle;
   final TextStyle xAxisTitleStyle;
-  final Color refGraphColor;
-  final Color levelGraphColor;
   final String yAxisTitle;
   final TextStyle yAxisTitleStyle;
 
@@ -62,22 +54,14 @@ class AmpDsAlignmentDependencies {
     required this.getMediumBoldFontWeight,
     required this.saveButton,
     required this.revertButton,
-    required this.refBarColor,
-    required this.levelBarColor,
     required this.tooltipTextStyle,
     required this.axisLabelTextStyle,
     required this.maximumYAxisValue,
     required this.minimumYAxisValue,
-    required this.referenceWidth,
-    required this.referenceBorder,
-    required this.levelBarWidth,
-    required this.levelBarBorder,
 
     /// buildFLTitlesData ///
     required this.xAxisTitle,
     required this.xAxisTitleStyle,
-    required this.refGraphColor,
-    required this.levelGraphColor,
     required this.yAxisTitle,
     required this.yAxisTitleStyle,
 
@@ -89,12 +73,10 @@ class AmpDsAlignmentDependencies {
 }
 
 class AmpDsAlignment extends StatefulWidget {
-  final List<DSPointData> dataPoints;
   final AmpDsAlignmentDependencies dependencies;
 
   const AmpDsAlignment({
     super.key,
-    required this.dataPoints,
     required this.dependencies,
   });
 
@@ -171,41 +153,47 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Center(
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          maxY: dependencies.maximumYAxisValue,
-                          minY: dependencies.minimumYAxisValue,
-                          barGroups: dataPoints.map((point) {
-                            return BarChartGroupData(
-                              showingTooltipIndicators: [0, 1],
-                              x: point.freq.toInt(),
-                              barRods: [
-                                BarChartRodData(
-                                  toY: point.reference.toDouble(),
-                                  color: dependencies.refBarColor,
-                                  width: dependencies.referenceWidth,
-                                  borderRadius: dependencies.referenceBorder,
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 400,
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: dependencies.maximumYAxisValue,
+                        minY: dependencies.minimumYAxisValue,
+                        barGroups: dataPoints.map((point) {
+                          return BarChartGroupData(
+                            showingTooltipIndicators: [0, 1],
+                            x: point.freq.toInt(),
+                            barRods: [
+                              BarChartRodData(
+                                toY: point.reference.toDouble(),
+                                color: AppColorConstants.colorRefChartBorder,
+                                width: 10,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4),
+                                  topRight: Radius.circular(4),
                                 ),
-                                BarChartRodData(
-                                  toY: point.level.toDouble(),
-                                  color: dependencies.levelBarColor,
-                                  width: dependencies.levelBarWidth,
-                                  borderRadius: dependencies.levelBarBorder,
+                              ),
+                              BarChartRodData(
+                                toY: point.level.toDouble(),
+                                color: AppColorConstants.colorLevelChartBorder,
+                                width: 10,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4),
+                                  topRight: Radius.circular(4),
                                 ),
-                              ],
-                            );
-                          }).toList(),
-                          titlesData: buildFLTitlesData(dependencies),
-                          barTouchData: buildBarTouchData(dependencies),
-                          gridData: buildFlGridData(dependencies),
-                          borderData: FlBorderData(
-                            border: Border(
-                              bottom: BorderSide(color: AppColorConstants.colorDivider, width: 1),
-                              left: BorderSide(color:  AppColorConstants.colorDivider, width: 1),
-                            ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                        titlesData: buildFLTitlesData(dependencies),
+                        barTouchData: buildBarTouchData(dependencies),
+                        gridData: buildFlGridData(dependencies),
+                        borderData: FlBorderData(
+                          border: Border(
+                            bottom: BorderSide(color: AppColorConstants.colorDivider, width: 1),
+                            left: BorderSide(color:  AppColorConstants.colorDivider, width: 1),
                           ),
                         ),
                       ),
@@ -222,7 +210,6 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
                     saveRevertInfo()
                   ],
                 ],
@@ -368,8 +355,9 @@ BarTouchData buildBarTouchData(AmpDsAlignmentDependencies dependencies) {
             textAlign: rodIndex == 0 ? TextAlign.left : TextAlign.right,
             rod.toY == 0 ? " " : (rodIndex == 0 ? rod.toY.toStringAsFixed(2).padRight(18) : rod.toY.toStringAsFixed(2).padLeft(18)),
             dependencies.tooltipTextStyle.copyWith(
-              color: rodIndex == 0 ? dependencies.refBarColor : dependencies.levelBarColor,
-            ));
+              color: rodIndex == 0 ? AppColorConstants.colorRefChartBorder : AppColorConstants.colorLevelChartBorder
+            ),
+        );
       },
     ),
   );
@@ -401,8 +389,8 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                     height: dependencies.getSize(11),
                     width: dependencies.getSize(12),
                     decoration: BoxDecoration(
-                      color: dependencies.refGraphColor,
-                      border: Border.all(color: dependencies.refBarColor),
+                      color: AppColorConstants.colorRefChartBackGround,
+                      border: Border.all(color: AppColorConstants.colorLevelChartBorder),
                     ),
                   ),
                 ),
@@ -420,8 +408,8 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                     height: dependencies.getSize(11),
                     width: dependencies.getSize(12),
                     decoration: BoxDecoration(
-                      color: dependencies.levelGraphColor,
-                      border: Border.all(color: dependencies.levelBarColor),
+                      color: AppColorConstants.colorLevelChartBackGround,
+                      border: Border.all(color: AppColorConstants.colorLevelChartBorder),
                     ),
                   ),
                 ),
