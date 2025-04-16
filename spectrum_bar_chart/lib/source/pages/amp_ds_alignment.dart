@@ -11,6 +11,7 @@ import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
+import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
@@ -28,8 +29,10 @@ class AmpDsAlignmentDependencies {
   final double Function(double) getSize;
 
   final FontWeight Function() getMediumBoldFontWeight;
-  final Widget Function() saveButton;
-  final Widget Function() revertButton;
+  final String saveButtonText;
+  final VoidCallback? saveButtonPressed;
+  final String revertButtonText;
+  final VoidCallback? revertButtonPressed;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
   final TextStyle tooltipTextStyle;
@@ -52,8 +55,10 @@ class AmpDsAlignmentDependencies {
     required this.context,
     required this.getSize,
     required this.getMediumBoldFontWeight,
-    required this.saveButton,
-    required this.revertButton,
+    required this.saveButtonText,
+    required this.saveButtonPressed,
+    required this.revertButtonText,
+    required this.revertButtonPressed,
     required this.tooltipTextStyle,
     required this.axisLabelTextStyle,
     required this.maximumYAxisValue,
@@ -201,12 +206,36 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                   ),
                   if (dependencies.isSwitchOfAuto) ...[
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(top: 5),
                       child: Wrap(
                         children: [
-                          dependencies.saveButton(),
-                          const SizedBox(width: 50),
-                          dependencies.revertButton(),
+                          AppButton(
+                            buttonWidth: 80,
+                            buttonRadius: 8,
+                            buttonHeight: 32,
+                            buttonColor: Colors.grey,
+                            borderColor: Colors.grey,
+                            padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                            buttonName: dependencies.saveButtonText,
+                            fontSize: 16,
+                            onPressed: dependencies.saveButtonPressed,
+                            fontFamily: AppAssetsConstants.openSans,
+                          ),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          AppButton(
+                            buttonWidth: 80,
+                            buttonRadius: 8,
+                            buttonHeight: 32,
+                            buttonColor: Colors.grey,
+                            borderColor: Colors.grey,
+                            padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                            buttonName: dependencies.revertButtonText,
+                            fontSize: 16,
+                            onPressed: dependencies.revertButtonPressed,
+                            fontFamily: AppAssetsConstants.openSans,
+                          ),
                         ],
                       ),
                     ),
@@ -390,7 +419,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                     width: dependencies.getSize(12),
                     decoration: BoxDecoration(
                       color: AppColorConstants.colorRefChartBackGround,
-                      border: Border.all(color: AppColorConstants.colorLevelChartBorder),
+                      border: Border.all(color: AppColorConstants.colorRefChartBackGround),
                     ),
                   ),
                 ),

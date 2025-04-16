@@ -8,6 +8,7 @@ class AppAssetsConstants {
   static const String openSans = 'OpenSans';
 
   static const String refreshAnimation = 'packages/spectrum_bar_chart/assets/animations/refresh_animation.json';
+  static const String loaderAnimation = 'packages/spectrum_bar_chart/assets/animations/refresh_animation.json';
 }
 
 class AppColorConstants {

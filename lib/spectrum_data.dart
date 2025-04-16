@@ -33,38 +33,10 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       context: context,
       getSize: (size) => size,
       getMediumBoldFontWeight: () => FontWeight.normal,
-      saveButton: () => InkWell(
-        onTap: () {},
-        child: Container(
-          width: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Text(
-            "Save",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-      revertButton: () => InkWell(
-        onTap: () {},
-        child: Container(
-          width: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Text(
-            "Revert",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
+      saveButtonText: "Save",
+      revertButtonText: "Revert",
+      saveButtonPressed: () {},
+      revertButtonPressed: () {},
       axisLabelTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 12,
