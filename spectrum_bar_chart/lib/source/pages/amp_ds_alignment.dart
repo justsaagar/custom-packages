@@ -35,18 +35,18 @@ class AmpDsAlignmentDependencies {
   final VoidCallback? revertButtonPressed;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
-  final TextStyle tooltipTextStyle;
-  final TextStyle axisLabelTextStyle;
+  final TextStyle? tooltipTextStyle;
+  final TextStyle? axisLabelTextStyle;
 
 
   /// buildFLTitlesData ///
   final String xAxisTitle;
-  final TextStyle xAxisTitleStyle;
+  final TextStyle? xAxisTitleStyle;
   final String yAxisTitle;
-  final TextStyle yAxisTitleStyle;
+  final TextStyle? yAxisTitleStyle;
 
   /// Api Configuration ///
-  final String? apiUrl;
+  final String deviceId;
   final Map<String, String>? customHeaders;
   final Map<String, String>? bodyMap;
 
@@ -59,19 +59,19 @@ class AmpDsAlignmentDependencies {
     required this.saveButtonPressed,
     required this.revertButtonText,
     required this.revertButtonPressed,
-    required this.tooltipTextStyle,
-    required this.axisLabelTextStyle,
+    this.tooltipTextStyle,
+    this.axisLabelTextStyle,
     required this.maximumYAxisValue,
     required this.minimumYAxisValue,
 
     /// buildFLTitlesData ///
     required this.xAxisTitle,
-    required this.xAxisTitleStyle,
+    this.xAxisTitleStyle,
     required this.yAxisTitle,
-    required this.yAxisTitleStyle,
+    this.yAxisTitleStyle,
 
     /// Api Configuration ///
-    required this.apiUrl,
+    required this.deviceId,
     required this.customHeaders,
     required this.bodyMap,
   });
@@ -95,6 +95,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
   double constraintsWidth = 0.0;
   late ScreenLayoutType screenLayoutType;
   bool isSwitchOfAuto = true;
+  String apiUrl = '';
   /// This function is called when this object is inserted into the tree.///
 
 
@@ -104,7 +105,8 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     super.initState();
     amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.loading;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: widget.dependencies.apiUrl ?? "", context: context,);
+      apiUrl = 'https://192.168.44.176:3333/amps/${widget.dependencies.deviceId}/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=true';
+      amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: apiUrl, context: context,);
     });
 
   }
@@ -117,24 +119,27 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
         dsAmplifierController = controller;
         return ScreenLayoutTypeBuilder(builder: (context, screenType, constraints) {
           screenLayoutType = screenType;
-          constraintsWidth = constraints.maxWidth;
-          if (widget.dependencies.apiUrl != null) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildAmpDsAlignment(
-                  dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
-                  dependencies: widget.dependencies,
-                ),
-            ],
-          );
-          }
-          amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.failed;
-          return const Center(child: Text('No data or API URL provided'));
-        },);
-    },);
+            constraintsWidth = constraints.maxWidth;
+            if (apiUrl.isNotEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildAmpDsAlignment(
+                    dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
+                    dependencies: widget.dependencies,
+                  ),
+                ],
+              );
+            }
+            amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.failed;
+            return const Center(child: Text('No data or API URL provided'));
+          },
+        );
+      },
+    );
   }
+
   /// Chart Ui Built ////
   Widget buildAmpDsAlignment({
     required List<DSPointData> dataPoints,
@@ -215,7 +220,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                             buttonHeight: 32,
                             buttonColor: Colors.grey,
                             borderColor: Colors.grey,
-                            padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
                             buttonName: dependencies.saveButtonText,
                             fontSize: 16,
                             onPressed: dependencies.saveButtonPressed,
@@ -230,7 +235,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                             buttonHeight: 32,
                             buttonColor: Colors.grey,
                             borderColor: Colors.grey,
-                            padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
                             buttonName: dependencies.revertButtonText,
                             fontSize: 16,
                             onPressed: dependencies.revertButtonPressed,
@@ -329,34 +334,32 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       children: [
         Flexible(
           child: buildLastSeenView(
-              onTapTime: amplifierConfigurationHelper?.dsSpectrumOnTapTime,
-              apiStatus: amplifierConfigurationHelper?.spectrumApiStatus,
-              difference: amplifierConfigurationHelper?.dsSpectrumDifferenceTime,
-              isShow: amplifierConfigurationHelper?.dsSpectrumIsShowText ?? true,
-              isOffline: false,
-              textColor: AppColorConstants.colorPrimary,
-              /// Use Model //
-              updateTime: amplifierConfigurationHelper?.dsSpectrumUpdateTime,
-              differenceMessage:
-              amplifierConfigurationHelper?.dsSpectrumDataError != null
-                  ? "The refresh failed in "
-                  : null),
+            onTapTime: amplifierConfigurationHelper?.dsSpectrumOnTapTime,
+            apiStatus: amplifierConfigurationHelper?.spectrumApiStatus,
+            difference: amplifierConfigurationHelper?.dsSpectrumDifferenceTime,
+            isShow: amplifierConfigurationHelper?.dsSpectrumIsShowText ?? true,
+            isOffline: false,
+            textColor: AppColorConstants.colorPrimary,
+
+            /// Use Model //
+            updateTime: amplifierConfigurationHelper?.dsSpectrumUpdateTime,
+            differenceMessage: amplifierConfigurationHelper?.dsSpectrumDataError != null ? "The refresh failed in " : null,
+          ),
         ),
         AppRefresh(
           buttonColor: AppColorConstants.colorPrimary,
           loadingStatus: amplifierConfigurationHelper?.spectrumApiStatus ?? ApiStatus.loading,
           onPressed: () {
-            if(amplifierConfigurationHelper?.spectrumApiStatus != ApiStatus.loading) {
-              amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: widget.dependencies.apiUrl ?? "", context: context,isRefresh: true);
+            if (amplifierConfigurationHelper?.spectrumApiStatus != ApiStatus.loading) {
+              amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(
+                  apiUrl: apiUrl, context: context, isRefresh: true);
             }
           },
-          enabled: true
+          enabled: true,
         )
       ],
     );
   }
-
-
 }
 
 
@@ -374,25 +377,23 @@ BarTouchData buildBarTouchData(AmpDsAlignmentDependencies dependencies) {
       getTooltipColor: (group) => Colors.transparent,
       tooltipPadding: EdgeInsets.zero,
       tooltipMargin: 0,
-      getTooltipItem: (
-          BarChartGroupData group,
-          int groupIndex,
-          BarChartRodData rod,
-          int rodIndex,
-          ) {
+      getTooltipItem: (BarChartGroupData group, int groupIndex, BarChartRodData rod, int rodIndex) {
         return BarTooltipItem(
-            textAlign: rodIndex == 0 ? TextAlign.left : TextAlign.right,
-            rod.toY == 0 ? " " : (rodIndex == 0 ? rod.toY.toStringAsFixed(2).padRight(18) : rod.toY.toStringAsFixed(2).padLeft(18)),
-            dependencies.tooltipTextStyle.copyWith(
-              color: rodIndex == 0 ? AppColorConstants.colorRefChartBorder : AppColorConstants.colorLevelChartBorder
-            ),
+          textAlign: rodIndex == 0 ? TextAlign.left : TextAlign.right,
+          rod.toY == 0
+              ? " "
+              : (rodIndex == 0 ? rod.toY.toStringAsFixed(2).padRight(18) : rod.toY.toStringAsFixed(2).padLeft(18)),
+          dependencies.tooltipTextStyle ??
+              TextStyle(
+                fontSize: 11,
+                color: rodIndex == 0 ? AppColorConstants.colorRefChartBorder : AppColorConstants.colorLevelChartBorder,
+                fontWeight: FontWeight.bold,
+              ),
         );
       },
     ),
   );
-
 }
-
 
 /// X Cord Tile And Y Cord Tile Which On Suggestion Value ////
 FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
@@ -404,7 +405,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
         children: [
           Text(
             dependencies.xAxisTitle,
-            style: dependencies.xAxisTitleStyle
+            style: dependencies.xAxisTitleStyle ?? TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
           ),
           SizedBox(
             height: dependencies.getSize(60),
@@ -456,21 +457,21 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
         ],
       ),
       sideTitles: SideTitles(
+        showTitles: true,
         getTitlesWidget: (value, meta) => Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Text(
-            "$value",
-            style: dependencies.axisLabelTextStyle,
+            '$value',
+            style: dependencies.axisLabelTextStyle ?? TextStyle(fontSize: 12, color: Colors.grey[700]),
           ),
         ),
-        showTitles: true,
       ),
     ),
     leftTitles: AxisTitles(
       axisNameSize: 30,
       axisNameWidget: Text(
         dependencies.yAxisTitle,
-        style: dependencies.yAxisTitleStyle,
+        style: dependencies.yAxisTitleStyle ?? TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
       ),
       sideTitles: SideTitles(
         interval: 10,

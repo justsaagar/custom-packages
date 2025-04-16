@@ -22,12 +22,11 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
   @override
   Widget build(BuildContext context) {
     debugLogs("Current Screen ------> $runtimeType");
-    String apiUrl = 'https://192.168.44.176:3333/amps/$deviceEui/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=true';
     Map<String, String> customHeaders = {};
     Map<String,String> body = {};
     final dependencies = AmpDsAlignmentDependencies(
       isSwitchOfAuto: true,
-      apiUrl: apiUrl,
+      deviceId: deviceEui,
       customHeaders: customHeaders,
       bodyMap: body,
       context: context,
