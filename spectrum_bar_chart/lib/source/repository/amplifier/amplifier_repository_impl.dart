@@ -68,4 +68,30 @@ class AmplifierRepositoryImpl implements AmplifierRepository {
     }
     return  {'body':DsAutoAlignmentModel.empty(),'headers':{"updated_at":null} } ;
   }
+
+  @override
+  Future<Map<String, dynamic>> dsAutoAlignment(
+      {required String deviceEui, required BuildContext context,required bool isStatusCheck}) async {
+    try {
+      bool isRefresh = true;
+      final response = await restServices.postRestCallWithResponse(
+        url: "https://192.168.44.176:3333/amps/$deviceEui/ds_auto_alignment?timeout=15&retries=1&refresh=$isRefresh",
+         context: context,
+          body: isStatusCheck ? {}:{"auto_alignment_op_e": 4},);
+      if (response != null && response.body.isNotEmpty) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        if (responseData['result'] != null) {
+          DsAutoAlignmentModel dsAutoAlignmentModel = DsAutoAlignmentModel.fromJson(responseData);
+          return  {'body':dsAutoAlignmentModel,'headers':response.headers };
+        } else {
+          return {'body': responseData, 'headers': response.headers};
+        }
+      }
+      return  {'body':DsAutoAlignmentModel.empty(),'headers':{"updated_at":null} };
+    } on SocketException catch (e) {
+      debugLogs(
+          'catch exception in dsAutoAlignment ---> ${e.message}');
+    }
+    return  {'body':DsAutoAlignmentModel.empty(),'headers':{"updated_at":null} } ;
+  }
 }

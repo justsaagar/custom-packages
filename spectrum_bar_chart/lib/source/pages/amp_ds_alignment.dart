@@ -1,6 +1,8 @@
 library spectrum_bar_chart;
 
 
+import 'dart:async';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,14 +10,18 @@ import 'package:get_it/get_it.dart';
 import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
 import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
+import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
+import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
+import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
+import 'package:spectrum_bar_chart/source/utils/dialog_utils.dart';
 
 final getIt = GetIt.instance;
 class AmpDsAlignmentDependencies {
@@ -70,6 +76,15 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
   late ScreenLayoutType screenLayoutType;
   bool isSwitchOfAuto = true;
   String apiUrl = '';
+  bool isStartDownStream = false;
+  DateTime? dsAutoAlignUpdateTime;
+  DateTime? autoAlignmentOnTapTime;
+  Duration ? autoAlignmentDifferenceTime;
+  bool autoAlignmentIsShowText = true;
+  Timer? autoAlignmentRefreshTimer;
+  bool isSaveRevertUnable = false;
+
+
   /// This function is called when this object is inserted into the tree.///
 
 
@@ -97,8 +112,10 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
             if (apiUrl.isNotEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  startAutoAlignmentWidget(),
+                  const SizedBox(height: 20),
                   buildAmpDsAlignment(
                     dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
                     dependencies: widget.dependencies,
@@ -113,6 +130,86 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       },
     );
   }
+
+  /// Auto Alignment Button ///
+  Widget startAutoAlignmentWidget(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        AppButton(
+          buttonRadius: 9,
+          loadingStatus: isStartDownStream ? ApiStatus.loading : ApiStatus.success,
+          buttonHeight: getSize(35),
+          buttonWidth: getSize(220),
+          fontColor: isSwitchOfAuto
+              // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online    /// Api Into online Offline Status manage
+              ? AppColorConstants.colorWhite
+              : AppColorConstants.colorH1Grey,
+          borderColor: isSwitchOfAuto
+              // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online   /// Api Into online Offline Status manage
+              ? AppColorConstants.colorLightBlue.withOpacity(0.5)
+              : AppColorConstants.colorH1.withOpacity(0.5),
+          buttonName: "Start Auto Alignment",
+          onPressed: () async {
+            if (isSwitchOfAuto && !isStartDownStream) {
+              DialogUtils().confirmationDialog(
+                context,
+                "Confirm ?",
+                "Are you sure you want to perform auto-alignment?",
+                "Yes",
+                "No", () async {
+                Navigator.pop(context);
+                await getDsAlignment(context, widget.dependencies.deviceId).then((value) {});
+              },
+                    () => Navigator.pop(context),
+              );
+            }
+          },
+          buttonColor: isStartDownStream
+              ? AppColorConstants.colorLightBlue.withOpacity(0.6)
+              : isSwitchOfAuto
+              // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online ? // Api Into online Offline Status manage
+              ? AppColorConstants.colorLightBlue
+              : AppColorConstants.colorBackgroundDark,
+          fontSize: getSize(16),
+        ),
+        if (amplifierConfigurationHelper?.downStreamAutoAlignmentError != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: CustomPaint(
+              painter: DottedBorderPainter(
+                borderColor: AppColorConstants.colorRedLight.withOpacity(0.8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.error_outline, color: AppColorConstants.colorRedLight, size: 15),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        "${amplifierConfigurationHelper?.downStreamAutoAlignmentError}",
+                        style: TextStyle(
+                          color: AppColorConstants.colorDarkBlue,
+                          fontSize: 12,
+                          fontFamily: AppAssetsConstants.openSans,
+                          fontWeight: getMediumFontWeight(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        else
+          Container(height: 35),
+      ],
+    );
+  }
+
 
   /// Chart Ui Built ////
   Widget buildAmpDsAlignment({
@@ -215,13 +312,13 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: Colors.grey,
-            borderColor: Colors.grey,
+            buttonColor: isSaveRevertUnable ? null : Colors.grey,
+            borderColor: isSaveRevertUnable ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Save",
             fontSize: 16,
             loadingStatus: amplifierConfigurationHelper!.saveRevertApiStatusOfAutoAlign.value,
-            onPressed: () {
+            onPressed: !isSaveRevertUnable ? null :() {
               amplifierConfigurationHelper?.saveRevertDsAutoAlignment(context, widget.dependencies.deviceId, true);
             },
             fontFamily: AppAssetsConstants.openSans,
@@ -233,13 +330,13 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: Colors.grey,
-            borderColor: Colors.grey,
+            buttonColor: isSaveRevertUnable ? null : Colors.grey,
+            borderColor: isSaveRevertUnable ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Revert",
             fontSize: 16,
             loadingStatus: amplifierConfigurationHelper!.saveRevertApiStatusOfAutoAlign.value,
-            onPressed: () {
+            onPressed: !isSaveRevertUnable ? null :() {
               amplifierConfigurationHelper?.saveRevertDsAutoAlignment(context, widget.dependencies.deviceId, false);
             },
             fontFamily: AppAssetsConstants.openSans,
@@ -248,6 +345,101 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       ),
     );
   }
+
+  Future<dynamic> getDsAlignment(BuildContext context, String deviceEui) async {
+    autoAlignmentInitializeTimer();
+    amplifierConfigurationHelper?.downStreamAutoAlignmentError= null;
+    isStartDownStream = true;
+
+    dsAmplifierController?.update();
+    try {
+      int? status;
+      await dsAmplifierController?.dsAutoAlignment(deviceEui: deviceEui, context: context, isStatusCheck: false)
+          .then((value) async {
+        if (value['body'] is DsAutoAlignmentModel) {
+          DsAutoAlignmentModel model = value['body'];
+          if (model.result != null) {
+            status = model.result!.sampDownstreamAutoAlignStatus!.autoAlignStatus;
+          }
+        }else{
+          debugLogs("dsAlignmentFailed--> ");
+          amplifierConfigurationHelper?.downStreamAutoAlignmentError = value['body']['detail'];
+          'DS alignment failed.'.showError(context);
+          return;
+        }
+      });
+      //Step 3: Check status up to 3 times
+      if (status != null) {
+        await Future.delayed(const Duration(seconds: 10));
+        await checkDsAutoAlignmentStatus(deviceEui);
+      } else if (amplifierConfigurationHelper?.downStreamAutoAlignmentError == null && status == null) {
+        'DS alignment failed.'.showError(context);
+      }
+    } catch (e) {
+      debugLogs("getDsAutoAlignment--> ${e.toString()}");
+      'DS alignment failed.'.showError(context);
+      amplifierConfigurationHelper?.downStreamAutoAlignmentError = 'Something went wrong';
+    } finally {
+      autoAlignmentGetDifferenceTime();
+      isStartDownStream = false;
+      dsAmplifierController?.update();
+    }
+  }
+
+  void autoAlignmentInitializeTimer() {
+    dsAutoAlignUpdateTime == null;
+    autoAlignmentDifferenceTime = null;
+    autoAlignmentOnTapTime = DateTime.now();
+    autoAlignmentIsShowText = true;
+    autoAlignmentRefreshTimer?.cancel();
+  }
+
+  autoAlignmentGetDifferenceTime() {
+    autoAlignmentDifferenceTime = DateTime.now().difference(autoAlignmentOnTapTime!);
+    autoAlignmentRefreshTimer=Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        autoAlignmentIsShowText = false;
+        dsAmplifierController?.update();
+      }
+    });
+  }
+
+  Future<void> checkDsAutoAlignmentStatus(String deviceEui) async {
+    const int maxAttempts = 3;
+    const Duration delayBetweenAttempts = Duration(seconds: 10);
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      final response = await dsAmplifierController?.dsAutoAlignment(
+        deviceEui: deviceEui,
+        context: context,
+        isStatusCheck: true,
+      );
+      if (response?['body'] is DsAutoAlignmentModel) {
+        DsAutoAlignmentModel model = response?['body'];
+        if (model.result != null) {
+          int status = model.result!.sampDownstreamAutoAlignStatus!.autoAlignStatus;
+          if (status == 3) {
+            await amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: apiUrl, context: context,isRefresh: true);
+            isSaveRevertUnable = true;
+            dsAutoAlignUpdateTime= getLastUpdateTime(response?['headers']['updated_at']);
+            return; // Exit on success
+          } else if (attempt == maxAttempts) {
+            'DS alignment failed.'.showError(context);
+            isSaveRevertUnable = false;
+          }
+        }
+      } else {
+        amplifierConfigurationHelper?.downStreamAutoAlignmentError = 'Something went wrong';
+        break;
+      }
+      if (attempt < maxAttempts) {
+        await Future.delayed(delayBetweenAttempts);
+      }else{
+        amplifierConfigurationHelper?.downStreamAutoAlignmentError = "Auto alignment failed.";
+      }
+    }
+  }
+
+
 
 
   saveRevertInfo() {

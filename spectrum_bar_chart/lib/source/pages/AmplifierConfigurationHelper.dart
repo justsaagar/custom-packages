@@ -150,22 +150,22 @@ class AmplifierConfigurationHelper{
     if (isDsAlignment) {
       if (isSuccess) {
         msg = isSave
-            ? "save DsAlignment Completed"
-            : "revert DsAlignment Completed";
+            ? "DS alignment saved successfully"
+            : "DS alignment reverted successfully";
       } else {
         msg = isSave
-            ? "save DsAlignment Failed"
-            : "revert DsAlignment Failed";
+            ? "DS alignment save failed"
+            : "DS alignment revert failed";
       }
     } else {
       if (isSuccess) {
         msg = isSave
-            ? "save UsAlignment Completed"
-            : "revert UsAlignment Completed";
+            ? "US alignment saved successfully"
+            : "US alignment reverted successfully";
       } else {
         msg = isSave
-            ? "save UsAlignment Failed"
-            : "revert UsAlignment Failed";
+            ? "US alignment save failed"
+            : "US alignment revert failed";
       }
     }
 

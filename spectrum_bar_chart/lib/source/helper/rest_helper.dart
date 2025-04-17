@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
 
@@ -134,7 +135,7 @@ class RestHelper {
           debugLogs('Unexpected status code: ${response.statusCode} : ${response.body}');
           break;
       }
-    } catch (e) {
+    } on PlatformException catch (e) {
       debugLogs('Exception in postRestCallWithResponse: $e');
       if (context.mounted) 'Error in postRestCallWithResponse'.showError(context);
     }

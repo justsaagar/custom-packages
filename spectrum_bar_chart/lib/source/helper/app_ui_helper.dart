@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 
+getSize(double val){
+  return val;
+}
 getMediumFontWeight(){
   return FontWeight.w500;
 }
