@@ -30,18 +30,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       customHeaders: customHeaders,
       bodyMap: body,
       context: context,
-      saveButtonPressed: () {},
-      revertButtonPressed: () {},
-      axisLabelTextStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 12,
-        fontWeight: FontWeight.w900,
-      ),
-      tooltipTextStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 12,
-        fontWeight: FontWeight.w900,
-      ),
       maximumYAxisValue: 50,
       minimumYAxisValue: 0,
     );

@@ -15,4 +15,8 @@ class DsAmplifierController extends GetxController {
   }) async {
     return await amplifierRepository.dsAutoAlignmentSpectrumData(context: context, isRefresh: isRefresh, apiUrl: apiUrl, customHeaders: customHeaders, body: body);
   }
+
+  Future<Map<String, dynamic>> saveRevertDsAutoAlignment({required String deviceEui, required BuildContext context,required bool isSave}) async {
+    return await amplifierRepository.saveRevertDsAutoAlignment(deviceEui: deviceEui, context: context, isSave: isSave);
+  }
 }

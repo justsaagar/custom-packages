@@ -12,6 +12,7 @@ import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
+import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
@@ -25,8 +26,6 @@ class AmpDsAlignmentDependencies {
   /// Api Status ///
   final BuildContext context;
 
-  final VoidCallback? saveButtonPressed;
-  final VoidCallback? revertButtonPressed;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
   final TextStyle? tooltipTextStyle;
@@ -40,8 +39,6 @@ class AmpDsAlignmentDependencies {
   AmpDsAlignmentDependencies({
     required this.isSwitchOfAuto,
     required this.context,
-    required this.saveButtonPressed,
-    required this.revertButtonPressed,
     this.tooltipTextStyle,
     this.axisLabelTextStyle,
     required this.maximumYAxisValue,
@@ -83,7 +80,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.loading;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       apiUrl = 'https://192.168.44.176:3333/amps/${widget.dependencies.deviceId}/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=true';
-      amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: apiUrl, context: context,);
+      amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: apiUrl, context: context);
     });
 
   }
@@ -186,43 +183,13 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                       ),
                     ),
                   ),
-                  if (dependencies.isSwitchOfAuto) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Wrap(
-                        children: [
-                          AppButton(
-                            buttonWidth: 80,
-                            buttonRadius: 8,
-                            buttonHeight: 32,
-                            buttonColor: Colors.grey,
-                            borderColor: Colors.grey,
-                            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
-                            buttonName: "Save",
-                            fontSize: 16,
-                            onPressed: dependencies.saveButtonPressed,
-                            fontFamily: AppAssetsConstants.openSans,
-                          ),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          AppButton(
-                            buttonWidth: 80,
-                            buttonRadius: 8,
-                            buttonHeight: 32,
-                            buttonColor: Colors.grey,
-                            borderColor: Colors.grey,
-                            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
-                            buttonName: "Revert",
-                            fontSize: 16,
-                            onPressed: dependencies.revertButtonPressed,
-                            fontFamily: AppAssetsConstants.openSans,
-                          ),
-                        ],
-                      ),
-                    ),
-                    saveRevertInfo()
-                  ],
+                  if (isSwitchOfAuto)
+                    Obx(() => Column(
+                          children: [
+                            saveRevertButtonOfAutoAlignWidget(),
+                            saveRevertInfo()
+                          ],
+                        )),
                 ],
               ),
             ),
@@ -232,6 +199,56 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       ),
     );
   }
+
+  saveRevertButtonOfAutoAlignWidget() {
+    if(amplifierConfigurationHelper
+        ?.saveRevertApiStatusOfAutoAlign.value ==
+        ApiStatus.loading) {
+      return const SizedBox(
+          height: 85, width: 50, child: AppLoader());
+    }
+    return  Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Wrap(
+        children: [
+          AppButton(
+            buttonWidth: 80,
+            buttonRadius: 8,
+            buttonHeight: 32,
+            buttonColor: Colors.grey,
+            borderColor: Colors.grey,
+            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
+            buttonName: "Save",
+            fontSize: 16,
+            loadingStatus: amplifierConfigurationHelper!.saveRevertApiStatusOfAutoAlign.value,
+            onPressed: () {
+              amplifierConfigurationHelper?.saveRevertDsAutoAlignment(context, widget.dependencies.deviceId, true);
+            },
+            fontFamily: AppAssetsConstants.openSans,
+          ),
+          const SizedBox(
+            width: 50,
+          ),
+          AppButton(
+            buttonWidth: 80,
+            buttonRadius: 8,
+            buttonHeight: 32,
+            buttonColor: Colors.grey,
+            borderColor: Colors.grey,
+            padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
+            buttonName: "Revert",
+            fontSize: 16,
+            loadingStatus: amplifierConfigurationHelper!.saveRevertApiStatusOfAutoAlign.value,
+            onPressed: () {
+              amplifierConfigurationHelper?.saveRevertDsAutoAlignment(context, widget.dependencies.deviceId, false);
+            },
+            fontFamily: AppAssetsConstants.openSans,
+          ),
+        ],
+      ),
+    );
+  }
+
 
   saveRevertInfo() {
     return const Column(

@@ -10,6 +10,7 @@ import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
 import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
+import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
 
 class AmplifierConfigurationHelper{
   AmpDsAlignmentState state;
@@ -23,6 +24,12 @@ class AmplifierConfigurationHelper{
   DateTime? dsSpectrumUpdateTime;
   dynamic downStreamAutoAlignmentError;
   Timer? dsSpectrumRefreshTimer;
+  Rx<ApiStatus> saveRevertApiStatusOfAutoAlign = ApiStatus.initial.obs;
+  ApiStatus autoAlignmentApiStatus = ApiStatus.initial;
+  DsAutoAlignmentModel dsAutoAlignmentModel = DsAutoAlignmentModel.empty();
+
+
+
 
 
   AmplifierConfigurationHelper(this.state) {
@@ -108,6 +115,68 @@ class AmplifierConfigurationHelper{
       reference: item.reference.toDouble() / 100,
     )).toList();
   }
+
+  /// OnPressed On Save Button ///
+
+  Future<dynamic> saveRevertDsAutoAlignment(BuildContext context, String deviceEui, bool isSave) async {
+    try {
+      saveRevertApiStatusOfAutoAlign.value = ApiStatus.loading;
+      await state.dsAmplifierController?.saveRevertDsAutoAlignment(
+          isSave:isSave,
+          deviceEui: deviceEui,
+          context: context)
+          .then((value) async {
+        if (value['body'].result != null) {
+          debugLogs("Save Revert Result : ${value['body'].result}");
+          await getDsAutoAlignmentSpectrumData(apiUrl: state.apiUrl, context: context,isRefresh: true);
+          autoAlignmentApiStatus = ApiStatus.success;
+        } else {
+          displayToastNotification(context,true,isSave,false);
+          return;
+        }
+      });
+    } catch (ex) {
+      displayToastNotification(context,true,isSave,false);
+    } finally {
+      saveRevertApiStatusOfAutoAlign.value = ApiStatus.success;
+      state.dsAmplifierController?.update();
+    }
+  }
+
+  displayToastNotification(
+      BuildContext context, bool isDsAlignment, bool isSave, bool isSuccess) {
+    String msg = "";
+
+    if (isDsAlignment) {
+      if (isSuccess) {
+        msg = isSave
+            ? "save DsAlignment Completed"
+            : "revert DsAlignment Completed";
+      } else {
+        msg = isSave
+            ? "save DsAlignment Failed"
+            : "revert DsAlignment Failed";
+      }
+    } else {
+      if (isSuccess) {
+        msg = isSave
+            ? "save UsAlignment Completed"
+            : "revert UsAlignment Completed";
+      } else {
+        msg = isSave
+            ? "save UsAlignment Failed"
+            : "revert UsAlignment Failed";
+      }
+    }
+
+    if (isSuccess) {
+      msg.showSuccess(context);
+    } else {
+      msg.showError(context);
+    }
+  }
+
+
 
 
 }

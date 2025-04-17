@@ -8,4 +8,7 @@ abstract class AmplifierRepository {
     required Map<String, String>? customHeaders,
     required Map<String, String>? body,
   });
+
+  Future<Map<String, dynamic>> saveRevertDsAutoAlignment(
+      {required bool isSave ,required String deviceEui, required BuildContext context});
 }
