@@ -115,7 +115,6 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   startAutoAlignmentWidget(),
-                  const SizedBox(height: 20),
                   buildAmpDsAlignment(
                     dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
                     dependencies: widget.dependencies,
