@@ -25,25 +25,12 @@ class AmpDsAlignmentDependencies {
   /// Api Status ///
   final BuildContext context;
 
-  /// Chart Height and Width ///
-  final double Function(double) getSize;
-
-  final FontWeight Function() getMediumBoldFontWeight;
-  final String saveButtonText;
   final VoidCallback? saveButtonPressed;
-  final String revertButtonText;
   final VoidCallback? revertButtonPressed;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
   final TextStyle? tooltipTextStyle;
   final TextStyle? axisLabelTextStyle;
-
-
-  /// buildFLTitlesData ///
-  final String xAxisTitle;
-  final TextStyle? xAxisTitleStyle;
-  final String yAxisTitle;
-  final TextStyle? yAxisTitleStyle;
 
   /// Api Configuration ///
   final String deviceId;
@@ -53,22 +40,12 @@ class AmpDsAlignmentDependencies {
   AmpDsAlignmentDependencies({
     required this.isSwitchOfAuto,
     required this.context,
-    required this.getSize,
-    required this.getMediumBoldFontWeight,
-    required this.saveButtonText,
     required this.saveButtonPressed,
-    required this.revertButtonText,
     required this.revertButtonPressed,
     this.tooltipTextStyle,
     this.axisLabelTextStyle,
     required this.maximumYAxisValue,
     required this.minimumYAxisValue,
-
-    /// buildFLTitlesData ///
-    required this.xAxisTitle,
-    this.xAxisTitleStyle,
-    required this.yAxisTitle,
-    this.yAxisTitleStyle,
 
     /// Api Configuration ///
     required this.deviceId,
@@ -221,7 +198,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                             buttonColor: Colors.grey,
                             borderColor: Colors.grey,
                             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
-                            buttonName: dependencies.saveButtonText,
+                            buttonName: "Save",
                             fontSize: 16,
                             onPressed: dependencies.saveButtonPressed,
                             fontFamily: AppAssetsConstants.openSans,
@@ -236,7 +213,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                             buttonColor: Colors.grey,
                             borderColor: Colors.grey,
                             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
-                            buttonName: dependencies.revertButtonText,
+                            buttonName: "Revert",
                             fontSize: 16,
                             onPressed: dependencies.revertButtonPressed,
                             fontFamily: AppAssetsConstants.openSans,
@@ -404,11 +381,11 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            dependencies.xAxisTitle,
-            style: dependencies.xAxisTitleStyle ?? TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
+            'MHz',
+            style: TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
           ),
           SizedBox(
-            height: dependencies.getSize(60),
+            height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -416,39 +393,39 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: dependencies.getSize(11),
-                    width: dependencies.getSize(12),
+                    height: 11,
+                    width: 12,
                     decoration: BoxDecoration(
                       color: AppColorConstants.colorRefChartBackGround,
                       border: Border.all(color: AppColorConstants.colorRefChartBackGround),
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Ref',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: dependencies.getSize(13),
-                    fontWeight: dependencies.getMediumBoldFontWeight(),
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: dependencies.getSize(11),
-                    width: dependencies.getSize(12),
+                    height: 11,
+                    width: 12,
                     decoration: BoxDecoration(
                       color: AppColorConstants.colorLevelChartBackGround,
                       border: Border.all(color: AppColorConstants.colorLevelChartBorder),
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Level',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: dependencies.getSize(13),
-                    fontWeight: dependencies.getMediumBoldFontWeight(),
+                    fontSize: 13,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ],
@@ -470,8 +447,8 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
     leftTitles: AxisTitles(
       axisNameSize: 30,
       axisNameWidget: Text(
-        dependencies.yAxisTitle,
-        style: dependencies.yAxisTitleStyle ?? TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
+        'dBmV',
+        style: TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
       ),
       sideTitles: SideTitles(
         interval: 10,

@@ -30,10 +30,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       customHeaders: customHeaders,
       bodyMap: body,
       context: context,
-      getSize: (size) => size,
-      getMediumBoldFontWeight: () => FontWeight.normal,
-      saveButtonText: "Save",
-      revertButtonText: "Revert",
       saveButtonPressed: () {},
       revertButtonPressed: () {},
       axisLabelTextStyle: const TextStyle(
@@ -48,16 +44,6 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       ),
       maximumYAxisValue: 50,
       minimumYAxisValue: 0,
-      xAxisTitle: 'MHz',
-      xAxisTitleStyle: const TextStyle(
-        color: Colors.grey,
-        fontSize: 16,
-      ),
-      yAxisTitle: 'dBmV',
-      yAxisTitleStyle: const TextStyle(
-        color: Colors.grey,
-        fontSize: 16,
-      ),
     );
     return GetBuilder(
       init: DsAmplifierController(),
