@@ -4,6 +4,7 @@ library spectrum_bar_chart;
 import 'dart:async';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -13,7 +14,9 @@ import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
+import 'package:spectrum_bar_chart/source/model/amplifier_status_item.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
@@ -21,6 +24,7 @@ import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
 import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
+import 'package:spectrum_bar_chart/source/ui/manual_alignment_page.dart';
 import 'package:spectrum_bar_chart/source/utils/dialog_utils.dart';
 
 final getIt = GetIt.instance;
@@ -96,6 +100,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       apiUrl = 'https://192.168.44.176:3333/amps/${widget.dependencies.deviceId}/ds_auto_alignment_spectrum_data?timeout=15&retries=1&refresh=true';
       amplifierConfigurationHelper?.getDsAutoAlignmentSpectrumData(apiUrl: apiUrl, context: context);
+      amplifierConfigurationHelper?.getDsManualAlignment(context,widget.dependencies.deviceId);
     });
 
   }
@@ -110,16 +115,34 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
           screenLayoutType = screenType;
             constraintsWidth = constraints.maxWidth;
             if (apiUrl.isNotEmpty) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  startAutoAlignmentWidget(),
-                  buildAmpDsAlignment(
-                    dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
-                    dependencies: widget.dependencies,
-                  ),
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        startAutoAlignmentWidget(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: buildAmpDsAlignment(
+                            dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
+                            dependencies: widget.dependencies,
+                          ),
+                        ),
+                        SizedBox(width: getSize(10)),
+                        Expanded(
+                          child: ampInterstageValuesView()
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               );
             }
             amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.failed;
@@ -296,6 +319,77 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     );
   }
 
+  Widget ampInterstageValuesView() {
+    return ManualAlignmentPage(
+      isSwitchOfAuto: isSwitchOfAuto,
+      isDSAlignment: true,
+      screenLayoutType: screenLayoutType,
+      dsAmplifierController: dsAmplifierController!,
+      isOffline : true, /// THis Condition is Pending
+      amplifierConfigurationHelper: amplifierConfigurationHelper!,
+      dsManualAlignmentItem: amplifierConfigurationHelper!.dsManualAlignmentItem,
+      onTapWrite: (DsManualAlignmentItem dsManualAlignmentItem) async {
+        await amplifierConfigurationHelper?.setDsManualAlignment(context, widget.dependencies.deviceId, dsManualAlignmentItem);
+        await amplifierConfigurationHelper?.getDsManualAlignment(
+            context,
+            widget.dependencies.deviceId,
+            isFromSetAPI: (isSwitchOfAuto == false),isRefreshDSSpectrum: true);
+      },
+      onTapSave: (DsManualAlignmentItem dsManualAlignmentItem) {
+        amplifierConfigurationHelper?.saveRevertDsManualAlignment(
+            context, widget.dependencies.deviceId, dsManualAlignmentItem,true);
+      },
+      onTapRevert: (DsManualAlignmentItem dsManualAlignmentItem) {
+        amplifierConfigurationHelper?.saveRevertDsManualAlignment(
+            context, widget.dependencies.deviceId, dsManualAlignmentItem,false);
+      },
+      onRefreshClicked: () {
+        amplifierConfigurationHelper?.getDsManualAlignment(context, widget.dependencies.deviceId,isFromSetAPI: (isSwitchOfAuto == false));
+      },
+      buttonView: buildSwitchButtonView(),
+      settingModel:amplifierConfigurationHelper!.dsAlignmentSettingModel,
+      isSaveRevertDisplay: isSaveRevertUnable,
+    );
+  }
+
+  Widget buildSwitchButtonView(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+         'Enable Manual Mode',
+          style: TextStyle(fontStyle:   FontStyle.italic,
+              fontFamily: AppAssetsConstants.openSans,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.32,
+              color: AppColorConstants.colorPrimary,
+              fontSize: getSize(15)),
+        ),
+        SizedBox(width: getSize(10)),
+        CupertinoSwitch(
+          activeColor: AppColorConstants.colorPrimary,
+          value: !isSwitchOfAuto,
+          onChanged: (onChangeValue) async {
+            debugLogs("On Change Value : $onChangeValue");
+            debugLogs("is Switch Auto : $isSwitchOfAuto");
+            if (!onChangeValue) {
+              //Auto Alignment ON
+
+              isSwitchOfAuto = !onChangeValue;
+              print("-------VALUE 1-------");
+              dsAmplifierController?.update();
+            }else{
+              //Auto Alignment OFF
+              isSwitchOfAuto = !onChangeValue;
+              print("-------VALUE 2-------");
+              dsAmplifierController?.update();
+            }
+          },
+        ),
+      ],
+    );
+  }
+
   saveRevertButtonOfAutoAlignWidget() {
     if(amplifierConfigurationHelper
         ?.saveRevertApiStatusOfAutoAlign.value ==
@@ -437,9 +531,6 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       }
     }
   }
-
-
-
 
   saveRevertInfo() {
     return const Column(

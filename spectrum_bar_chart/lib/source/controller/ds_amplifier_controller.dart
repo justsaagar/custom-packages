@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
 import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 
 class DsAmplifierController extends GetxController {
   AmplifierRepository amplifierRepository = getIt.get<AmplifierRepository>();
@@ -22,5 +23,17 @@ class DsAmplifierController extends GetxController {
 
   Future<Map<String, dynamic>> dsAutoAlignment({required String deviceEui, required BuildContext context, required bool isStatusCheck}) async {
     return await amplifierRepository.dsAutoAlignment(deviceEui: deviceEui, context: context, isStatusCheck: isStatusCheck);
+  }
+
+  Future<Map<String, dynamic>> dsManualAlignment({required String deviceEui, required BuildContext context}) async {
+    return await amplifierRepository.dsManualAlignment(deviceEui: deviceEui, context: context);
+  }
+
+  Future<Map<String, dynamic>> setDsManualAlignment({required DsManualAlignmentItem dsManualAlignmentItem,required String deviceEui, required BuildContext context}) async {
+    return await amplifierRepository.setDsManualAlignment(dsManualAlignmentItem: dsManualAlignmentItem,deviceEui: deviceEui, context: context);
+  }
+
+  Future<Map<String, dynamic>> saveRevertDsManualAlignment({required DsManualAlignmentItem dsManualAlignmentItem,required String deviceEui, required BuildContext context}) async {
+    return await amplifierRepository.saveRevertDsManualAlignment(dsManualAlignmentItem: dsManualAlignmentItem,deviceEui: deviceEui, context: context);
   }
 }

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
+import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
 
 getSize(double val){
   return val;
+}
+
+getMediumBoldFontWeight(){
+  return FontWeight.w600;
 }
 getMediumFontWeight(){
   return FontWeight.w500;
@@ -40,3 +46,42 @@ Widget buildLastSeenView({
     }
   }
 }
+
+BoxDecoration borderViewDecoration = BoxDecoration(
+  border: Border.all(color: AppColorConstants.colorChart, width: 1.8),
+  borderRadius: const BorderRadius.all(Radius.circular(8)),
+);
+
+errorMessageView({required String errorMessage,double ?padding}) {
+  return Padding(
+    padding: EdgeInsets.all(padding ?? 8.0),
+    child: CustomPaint(
+      painter: DottedBorderPainter(
+        borderColor: AppColorConstants.colorRedLight.withOpacity(0.8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline,
+                color: AppColorConstants.colorRedLight, size: 15),
+            const SizedBox(width: 5),
+            Flexible(
+              child: Text(
+                errorMessage,
+                style: TextStyle(
+                  color: AppColorConstants.colorDarkBlue,
+                  fontSize: 12,
+                  fontFamily: AppAssetsConstants.openSans,
+                  fontWeight: getMediumFontWeight(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+

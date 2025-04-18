@@ -42,21 +42,10 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AmpDsAlignment(
-                    dependencies: dependencies,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: AmpDsAlignment(
-                    dependencies: dependencies,
-                  ),
-                ),
-              ],
+            child: Expanded(
+              child: AmpDsAlignment(
+                dependencies: dependencies,
+              ),
             ),
           ),
         );

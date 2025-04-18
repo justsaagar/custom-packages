@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 
 abstract class AmplifierRepository {
   Future<Map<String, dynamic>> dsAutoAlignmentSpectrumData({
@@ -14,4 +15,13 @@ abstract class AmplifierRepository {
 
   Future<Map<String, dynamic>> dsAutoAlignment(
       {required String deviceEui, required BuildContext context, required bool isStatusCheck });
+
+  Future<Map<String, dynamic>> dsManualAlignment(
+      {required String deviceEui, required BuildContext context});
+
+  Future<Map<String, dynamic>> setDsManualAlignment(
+      {required DsManualAlignmentItem dsManualAlignmentItem,required String deviceEui, required BuildContext context});
+
+  Future<Map<String, dynamic>> saveRevertDsManualAlignment(
+      {required DsManualAlignmentItem dsManualAlignmentItem,required String deviceEui, required BuildContext context});
 }

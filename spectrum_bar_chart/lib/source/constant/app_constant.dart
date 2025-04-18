@@ -7,8 +7,17 @@ class AppAssetsConstants {
 
   static const String openSans = 'OpenSans';
 
+  static const String iconPath = 'packages/spectrum_bar_chart/assets/ic/';
+
+
   static const String refreshAnimation = 'packages/spectrum_bar_chart/assets/animations/refresh_animation.json';
   static const String loaderAnimation = 'packages/spectrum_bar_chart/assets/animations/loader_animation.json';
+  static const String rightArrowIcon = '${iconPath}ic_right_arrow.svg';
+  static const String attnIcon = '${iconPath}ic_attn.svg';
+  static const String equIcon = '${iconPath}ic_rectangle.svg';
+
+
+
 }
 
 class AppColorConstants {
