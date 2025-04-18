@@ -42,6 +42,7 @@ class AmplifierConfigurationHelper{
   DsManualAlignmentItem dsManualAlignmentItem = DsManualAlignmentItem.empty();
   AlignmentSettingModel dsAlignmentSettingModel = AlignmentSettingModel.empty();
   Timer? refreshTimerOfManualAlignment;
+  bool isManualSaveRevertEnable = false;
 
 
 
@@ -183,15 +184,19 @@ class AmplifierConfigurationHelper{
             dsManualAlignmentItem.dsValues = value['body'].result.dsValues;
             // addMapWritten(true);
             manualAlignmentApiStatus = ApiStatus.success;
+            isManualSaveRevertEnable = true;
           } else {
             displayToastNotificationSetManualAlignment(context,true,dsManualAlignmentItem,false);
+            isManualSaveRevertEnable = false;
           }
         }else{
           displayToastNotificationSetManualAlignment(context,true,dsManualAlignmentItem,false);
+          isManualSaveRevertEnable = false;
         }
       });
     } catch (ex) {
       displayToastNotificationSetManualAlignment(context,true,dsManualAlignmentItem,false);
+      isManualSaveRevertEnable = false;
     } finally {
       state.dsAmplifierController?.update();
     }

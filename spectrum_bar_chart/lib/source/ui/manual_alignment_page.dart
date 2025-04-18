@@ -547,12 +547,12 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: widget.isSaveRevertDisplay ? Colors.grey : null,
-            borderColor: widget.isSaveRevertDisplay ? Colors.grey : null,
+            buttonColor: widget.isSaveRevertDisplay ? null : Colors.grey,
+            borderColor: widget.isSaveRevertDisplay ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: 'Save',
             fontSize: 16,
-            onPressed: widget.isSaveRevertDisplay
+            onPressed: !widget.isSaveRevertDisplay
                 ? null
                 : () {
               DsManualAlignmentItem dsManualAlignmentItem =
@@ -569,12 +569,12 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: widget.isSaveRevertDisplay ? Colors.grey : null,
-            borderColor: widget.isSaveRevertDisplay ? Colors.grey : null,
+            buttonColor: widget.isSaveRevertDisplay ? null : Colors.grey,
+            borderColor: widget.isSaveRevertDisplay ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: 'Revert',
             fontSize: 16,
-            onPressed: widget.isSaveRevertDisplay
+            onPressed: !widget.isSaveRevertDisplay
                 ? null
                 : () {
               DsManualAlignmentItem dsManualAlignmentItem =

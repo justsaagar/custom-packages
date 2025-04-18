@@ -348,7 +348,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       },
       buttonView: buildSwitchButtonView(),
       settingModel:amplifierConfigurationHelper!.dsAlignmentSettingModel,
-      isSaveRevertDisplay: isSaveRevertUnable,
+      isSaveRevertDisplay: amplifierConfigurationHelper!.isManualSaveRevertEnable,
     );
   }
 
