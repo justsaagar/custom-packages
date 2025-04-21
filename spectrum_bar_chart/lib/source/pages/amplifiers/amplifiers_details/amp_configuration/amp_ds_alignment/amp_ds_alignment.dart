@@ -170,11 +170,11 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                 "Confirm ?",
                 "Are you sure you want to perform auto-alignment?",
                 "Yes",
-                "No", () async {
-                Navigator.pop(context);
-                await getDsAlignment(context, widget.dependencies.deviceId).then((value) {});
-              },
-                    () => Navigator.pop(context),
+                "No",
+                () {
+                  getDsAlignment(context, widget.dependencies.deviceId);
+                },
+                () => Navigator.pop(context),
               );
             }
           },
@@ -430,6 +430,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
   }
 
   Future<dynamic> getDsAlignment(BuildContext context, String deviceEui) async {
+    Navigator.pop(context);
     autoAlignmentInitializeTimer();
     amplifierConfigurationHelper?.downStreamAutoAlignmentError= null;
     isStartDownStream = true;
