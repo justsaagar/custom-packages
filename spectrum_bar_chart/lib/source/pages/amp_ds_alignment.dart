@@ -125,23 +125,36 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                         startAutoAlignmentWidget(),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: buildAmpDsAlignment(
-                            dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
-                            dependencies: widget.dependencies,
+                    if (screenType == ScreenLayoutType.desktop) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: buildAmpDsAlignment(
+                              dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
+                              dependencies: widget.dependencies,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: getSize(10)),
-                        Expanded(
-                          child: ampInterstageValuesView()
-                        ),
+                          SizedBox(width: getSize(10)),
+                          Expanded(
+                              child: ampInterstageValuesView()
+                          ),
+                        ],
+                      )
+                    ] else ...[
+                      /// ToDo : Commented old chart and update with custom package
+                      SizedBox(height: getSize(25)),
+                      buildAmpDsAlignment(
+                        dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
+                        dependencies: widget.dependencies,
+                      ),
+                      SizedBox(height: getSize(10)),
+                      ampInterstageValuesView(),
+                      SizedBox(height: getSize(25)),
+                      // ampInterstageValuesView(),
+                    ]
                       ],
-                    )
-                  ],
                 ),
               );
             }
