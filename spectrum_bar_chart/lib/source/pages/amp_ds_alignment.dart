@@ -14,9 +14,8 @@ import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/model/amplifier_status_item.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/data_amplifier.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
@@ -144,7 +143,6 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                       )
                     ] else ...[
                       /// ToDo : Commented old chart and update with custom package
-                      SizedBox(height: getSize(25)),
                       buildAmpDsAlignment(
                         dataPoints: amplifierConfigurationHelper?.dsSpectrumDataPoints ?? [],
                         dependencies: widget.dependencies,

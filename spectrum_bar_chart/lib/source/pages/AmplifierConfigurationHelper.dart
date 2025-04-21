@@ -10,15 +10,19 @@ import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
 import 'package:spectrum_bar_chart/source/model/alignment_setting_model.dart';
 import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/data_amplifier.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
 import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
 
 class AmplifierConfigurationHelper{
   AmpDsAlignmentState state;
-  ApiStatus spectrumApiStatus = ApiStatus.initial;
-  List<DSPointData> dsSpectrumDataPoints = [];
+  DsAutoAlignmentModel dsAutoAlignmentModel = DsAutoAlignmentModel.empty();
+  DsManualAlignmentItem dsManualAlignmentItem = DsManualAlignmentItem.empty();
+  AlignmentSettingModel dsAlignmentSettingModel = AlignmentSettingModel.empty();
+
   String? dsSpectrumDataError;
+  List<DSPointData> dsSpectrumDataPoints = [];
+  ApiStatus spectrumApiStatus = ApiStatus.initial;
   DateTime? dsSpectrumOnTapTime;
   Duration ? dsSpectrumDifferenceTime;
   bool dsSpectrumIsShowText = true;
@@ -28,7 +32,6 @@ class AmplifierConfigurationHelper{
   Timer? dsSpectrumRefreshTimer;
   Rx<ApiStatus> saveRevertApiStatusOfAutoAlign = ApiStatus.initial.obs;
   ApiStatus autoAlignmentApiStatus = ApiStatus.initial;
-  DsAutoAlignmentModel dsAutoAlignmentModel = DsAutoAlignmentModel.empty();
 
 
   /// THis AllVariables For Manual Alignment set Right Side View ///
@@ -39,8 +42,6 @@ class AmplifierConfigurationHelper{
   DateTime? onTapTimeOfManualAlignment;
   DateTime? manualAlignmentUpdateTime;
   Rx<ApiStatus> saveRevertApiStatus = ApiStatus.initial.obs;
-  DsManualAlignmentItem dsManualAlignmentItem = DsManualAlignmentItem.empty();
-  AlignmentSettingModel dsAlignmentSettingModel = AlignmentSettingModel.empty();
   Timer? refreshTimerOfManualAlignment;
   bool isManualSaveRevertEnable = false;
 
@@ -113,7 +114,7 @@ class AmplifierConfigurationHelper{
     } catch (e) {
       debugLogs("fetchChartDataWithRestHelper error--> $e");
       spectrumApiStatus = ApiStatus.failed;
-      dsSpectrumDataError= "Fetch Data Error";
+      dsSpectrumDataError= "Something went wrong";
     }finally{
       dsSpectrumGetDifferenceTime();
       state.dsAmplifierController?.update();
@@ -395,8 +396,4 @@ class AmplifierConfigurationHelper{
       msg.showError(context);
     }
   }
-
-
-
-
 }

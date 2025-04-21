@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'data_amplifier.dart';
+part of 'amplifier.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
