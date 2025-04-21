@@ -1,30 +1,9 @@
 library spectrum_bar_chart;
 
-
-import 'dart:async';
-
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
-import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
-import 'package:spectrum_bar_chart/source/ui/app_button.dart';
-import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
-import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
-import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
-import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
-import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
-import 'package:spectrum_bar_chart/source/ui/manual_alignment_page.dart';
-import 'package:spectrum_bar_chart/source/utils/dialog_utils.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
+
+
 
 final getIt = GetIt.instance;
 class AmpDsAlignmentDependencies {
@@ -74,7 +53,7 @@ class AmpDsAlignment extends StatefulWidget {
 
 class AmpDsAlignmentState extends State<AmpDsAlignment> {
   AmplifierConfigurationHelper? amplifierConfigurationHelper;
-  DsAmplifierController? dsAmplifierController;
+  TempAmplifierController? tempAmplifierController;
   double constraintsWidth = 0.0;
   late ScreenLayoutType screenLayoutType;
   bool isSwitchOfAuto = true;
@@ -107,9 +86,9 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
   Widget build(BuildContext context) {
     amplifierConfigurationHelper ?? (amplifierConfigurationHelper = AmplifierConfigurationHelper(this));
     return GetBuilder(
-      init: DsAmplifierController(),
-      builder: (DsAmplifierController controller) {
-        dsAmplifierController = controller;
+      init: TempAmplifierController(),
+      builder: (TempAmplifierController controller) {
+        tempAmplifierController = controller;
         return ScreenLayoutTypeBuilder(builder: (context, screenType, constraints) {
           screenLayoutType = screenType;
             constraintsWidth = constraints.maxWidth;
@@ -335,7 +314,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
       isSwitchOfAuto: isSwitchOfAuto,
       isDSAlignment: true,
       screenLayoutType: screenLayoutType,
-      dsAmplifierController: dsAmplifierController!,
+      tempAmplifierController: tempAmplifierController!,
       isOffline : true, /// THis Condition is Pending
       amplifierConfigurationHelper: amplifierConfigurationHelper!,
       dsManualAlignmentItem: amplifierConfigurationHelper!.dsManualAlignmentItem,
@@ -387,13 +366,13 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
               //Auto Alignment ON
 
               isSwitchOfAuto = !onChangeValue;
-              print("-------VALUE 1-------");
-              dsAmplifierController?.update();
+              debugLogs("-------VALUE 1-------");
+              tempAmplifierController?.update();
             }else{
               //Auto Alignment OFF
               isSwitchOfAuto = !onChangeValue;
-              print("-------VALUE 2-------");
-              dsAmplifierController?.update();
+              debugLogs("-------VALUE 2-------");
+              tempAmplifierController?.update();
             }
           },
         ),
@@ -455,10 +434,10 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     amplifierConfigurationHelper?.downStreamAutoAlignmentError= null;
     isStartDownStream = true;
 
-    dsAmplifierController?.update();
+    tempAmplifierController?.update();
     try {
       int? status;
-      await dsAmplifierController?.dsAutoAlignment(deviceEui: deviceEui, context: context, isStatusCheck: false)
+      await tempAmplifierController?.dsAutoAlignment(deviceEui: deviceEui, context: context, isStatusCheck: false)
           .then((value) async {
         if (value['body'] is DsAutoAlignmentModel) {
           DsAutoAlignmentModel model = value['body'];
@@ -486,7 +465,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     } finally {
       autoAlignmentGetDifferenceTime();
       isStartDownStream = false;
-      dsAmplifierController?.update();
+      tempAmplifierController?.update();
     }
   }
 
@@ -503,7 +482,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     autoAlignmentRefreshTimer=Timer(const Duration(seconds: 3), () {
       if (mounted) {
         autoAlignmentIsShowText = false;
-        dsAmplifierController?.update();
+        tempAmplifierController?.update();
       }
     });
   }
@@ -512,7 +491,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     const int maxAttempts = 3;
     const Duration delayBetweenAttempts = Duration(seconds: 10);
     for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-      final response = await dsAmplifierController?.dsAutoAlignment(
+      final response = await tempAmplifierController?.dsAutoAlignment(
         deviceEui: deviceEui,
         context: context,
         isStatusCheck: true,

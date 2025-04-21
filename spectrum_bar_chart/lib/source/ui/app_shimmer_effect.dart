@@ -1,7 +1,5 @@
-
-import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class AppShimmerEffectView extends StatelessWidget {
   final double? height;

@@ -1,11 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class AmplifierRepositoryImpl implements AmplifierRepository {
   RestHelper restServices = RestHelper.instance;

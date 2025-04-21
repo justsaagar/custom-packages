@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
-import 'package:spectrum_bar_chart/source/ui/app_button.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class DialogUtils {
 

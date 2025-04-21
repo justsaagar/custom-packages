@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
-import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
+
 
 getSize(double val){
   return val;

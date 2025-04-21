@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
-import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
 
-class DsAmplifierController extends GetxController {
+import 'package:spectrum_bar_chart/app_import.dart';
+
+class TempAmplifierController extends GetxController {
   AmplifierRepository amplifierRepository = getIt.get<AmplifierRepository>();
 
   Future<Map<String, dynamic>> dsAutoAlignmentSpectrumData({

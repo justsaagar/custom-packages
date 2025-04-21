@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class DottedBorderPainter extends CustomPainter {
   final Color borderColor;

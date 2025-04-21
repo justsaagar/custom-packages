@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 
-
-
-
 class AppAssetsConstants {
-
   static const String openSans = 'OpenSans';
 
   static const String animationPath = 'packages/spectrum_bar_chart/assets/animations/';
   static const String iconPath = 'packages/spectrum_bar_chart/assets/ic/';
-
 
   static const String refreshAnimation = '${animationPath}refresh_animation.json';
   static const String loaderAnimation = '${animationPath}loader_animation.json';
   static const String rightArrowIcon = '${iconPath}ic_right_arrow.svg';
   static const String attnIcon = '${iconPath}ic_attn.svg';
   static const String equIcon = '${iconPath}ic_rectangle.svg';
-
-
 
 }
 

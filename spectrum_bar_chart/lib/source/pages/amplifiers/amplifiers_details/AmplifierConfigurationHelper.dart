@@ -1,18 +1,7 @@
 
-import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
-import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/model/alignment_setting_model.dart';
-import 'package:spectrum_bar_chart/source/pages/amp_ds_alignment.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
-import 'package:spectrum_bar_chart/source/ui/app_toast.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class AmplifierConfigurationHelper{
   AmpDsAlignmentState state;
@@ -50,7 +39,7 @@ class AmplifierConfigurationHelper{
   AmplifierConfigurationHelper(this.state) {
     SchedulerBinding.instance.addPostFrameCallback(
           (timeStamp) async {
-            state.dsAmplifierController = Get.put(DsAmplifierController());
+            state.tempAmplifierController = Get.put(TempAmplifierController());
       },
     );
   }
@@ -67,7 +56,7 @@ class AmplifierConfigurationHelper{
     dsSpectrumDifferenceTime = DateTime.now().difference(dsSpectrumOnTapTime!);
     dsSpectrumRefreshTimer=Timer(const Duration(seconds: 3), () {
       dsSpectrumIsShowText = false;
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     });
   }
   /// User Pass Url and header so call api and get Data in chart....  ////
@@ -82,9 +71,9 @@ class AmplifierConfigurationHelper{
     dsSpectrumDataError = null;
     downStreamAutoAlignmentError= null;
     spectrumApiStatus = ApiStatus.loading;
-    state.dsAmplifierController?.update();
+    state.tempAmplifierController?.update();
     try {
-      await state.dsAmplifierController
+      await state.tempAmplifierController
           ?.dsAutoAlignmentSpectrumData(
         apiUrl: apiUrl,
         context: context,
@@ -117,7 +106,7 @@ class AmplifierConfigurationHelper{
       dsSpectrumDataError= "Something went wrong";
     }finally{
       dsSpectrumGetDifferenceTime();
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     }
   }
 
@@ -128,11 +117,11 @@ class AmplifierConfigurationHelper{
       if(manualAlignmentApiStatus == ApiStatus.loading) return;
       manualAlignmentApiStatus = ApiStatus.loading;
       initializeManualConfiguration();
-      state.dsAmplifierController?.update();
-      await state.dsAmplifierController
+      state.tempAmplifierController?.update();
+      await state.tempAmplifierController
           ?.dsManualAlignment(deviceEui: deviceEui, context: context)
           .then((value) async {
-        print("---Value===${value.toString()}");
+        debugLogs("---Value===${value.toString()}");
         if (value['body'] is DsManualAlignmentModel) {
           if (value['body'].result != null) {
             dsManualAlignmentItem = value['body'].result;
@@ -165,9 +154,9 @@ class AmplifierConfigurationHelper{
       differenceTimeOfManualAlignment = DateTime.now().difference( onTapTimeOfManualAlignment!);
       refreshTimerOfManualAlignment = Timer(const Duration(seconds: 3), () {
         isShowTextOfManualAlignment = false;
-        state.dsAmplifierController?.update();
+        state.tempAmplifierController?.update();
       });
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     }
   }
 
@@ -175,7 +164,7 @@ class AmplifierConfigurationHelper{
   Future<dynamic> setDsManualAlignment(BuildContext context, String deviceEui,
       DsManualAlignmentItem dsManualItem) async {
     try {
-      await state.dsAmplifierController?.setDsManualAlignment(
+      await state.tempAmplifierController?.setDsManualAlignment(
           dsManualAlignmentItem: dsManualItem,
           deviceEui: deviceEui,
           context: context)
@@ -199,7 +188,7 @@ class AmplifierConfigurationHelper{
       displayToastNotificationSetManualAlignment(context,true,dsManualAlignmentItem,false);
       isManualSaveRevertEnable = false;
     } finally {
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     }
   }
 
@@ -229,7 +218,7 @@ class AmplifierConfigurationHelper{
       DsManualAlignmentItem dsManualItem, bool isSave) async {
     try {
       saveRevertApiStatus.value = ApiStatus.loading;
-      await state.dsAmplifierController
+      await state.tempAmplifierController
           ?.saveRevertDsManualAlignment(
           dsManualAlignmentItem: dsManualItem,
           deviceEui: deviceEui,
@@ -257,38 +246,9 @@ class AmplifierConfigurationHelper{
       displayToastNotification(context,true,isSave,false);
     } finally {
       saveRevertApiStatus.value = ApiStatus.success;
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     }
   }
-
-
-  //
-  // void clearMapWritten(bool isDS, int index) {
-  //   final listTabs = amplifierPageHelper.listTabs;
-  //   isDS? listTabs[index].ampDeviceItem.mapWrittenCtrlDS.clear():listTabs[index].ampDeviceItem.mapWrittenCtrlUS.clear();
-  // }
-
-  // updateSetAPIValue(DsManualAlignmentItem dsManualAlignmentItem, int refreshIndex){
-  //   final ampItem = amplifierPageHelper.listTabs[refreshIndex].ampDeviceItem;
-  //   int index = dsManualAlignmentItem.dsValues.indexWhere((element) => (element.ctrlType == ampItem.mapCtrlStage.keys.first && element.stage == ampItem.mapCtrlStage.values.first));
-  //   if (index != -1) {
-  //     //dsManualAlignmentItem.dsValues[index].isProgressing.value = false;
-  //     dsManualAlignmentItem.dsValues[index].isSelected = false;
-  //   }
-  // }
-
-  // void addMapWritten(bool isDS,int index) {
-  //   final listTabs = amplifierPageHelper.listTabs;
-  //   var key = {
-  //     listTabs[index].ampDeviceItem.mapCtrlStage.keys.first : listTabs[index].ampDeviceItem.mapCtrlStage.keys.first
-  //   };
-  //   var map = (isDS) ?   listTabs[index].ampDeviceItem.mapWrittenCtrlDS :   listTabs[index].ampDeviceItem.mapWrittenCtrlUS;
-  //   if (!map.containsKey(key)) {
-  //     map[key] = 1;
-  //   }
-  // }
-
-
 
 
 
@@ -316,7 +276,7 @@ class AmplifierConfigurationHelper{
   Future<dynamic> saveRevertDsAutoAlignment(BuildContext context, String deviceEui, bool isSave) async {
     try {
       saveRevertApiStatusOfAutoAlign.value = ApiStatus.loading;
-      await state.dsAmplifierController?.saveRevertDsAutoAlignment(
+      await state.tempAmplifierController?.saveRevertDsAutoAlignment(
           isSave:isSave,
           deviceEui: deviceEui,
           context: context)
@@ -334,7 +294,7 @@ class AmplifierConfigurationHelper{
       displayToastNotification(context,true,isSave,false);
     } finally {
       saveRevertApiStatusOfAutoAlign.value = ApiStatus.success;
-      state.dsAmplifierController?.update();
+      state.tempAmplifierController?.update();
     }
   }
 

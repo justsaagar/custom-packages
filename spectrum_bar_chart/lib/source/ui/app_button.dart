@@ -1,9 +1,5 @@
 // ignore_for_file: deprecated_member_use
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;

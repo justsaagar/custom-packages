@@ -1,27 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
-import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
-import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/model/alignment_setting_model.dart';
-import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
-import 'package:spectrum_bar_chart/source/ui/app_button.dart';
-import 'package:spectrum_bar_chart/source/ui/app_image_assets.dart';
-import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
-import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
-import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
-import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 
 class ManualAlignmentPage extends StatefulWidget {
   final bool isSwitchOfAuto;
   final ScreenLayoutType screenLayoutType;
 
-  final DsAmplifierController dsAmplifierController;
+  final TempAmplifierController tempAmplifierController;
   final AmplifierConfigurationHelper amplifierConfigurationHelper;
   final DsManualAlignmentItem dsManualAlignmentItem;
   final AlignmentSettingModel settingModel;
@@ -40,7 +24,7 @@ class ManualAlignmentPage extends StatefulWidget {
     super.key,
     required this.isSwitchOfAuto,
     required this.screenLayoutType,
-    required this.dsAmplifierController,
+    required this.tempAmplifierController,
     required this.amplifierConfigurationHelper,
     required this.dsManualAlignmentItem,
     required this.onTapWrite,
@@ -796,7 +780,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
                 var newValue =
                     value.toInt() * widget.dsManualAlignmentItem.factor;
                 dsManualValues.value = newValue.toDouble();
-                widget.dsAmplifierController.update();
+                widget.tempAmplifierController.update();
               },
               isProgressing: false,
               title: getSelectedCtrlType(
@@ -812,7 +796,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
               },
               onChanged: (value) {
                 dsManualValues.value = double.parse(value) * widget.dsManualAlignmentItem.factor;
-                widget.dsAmplifierController.update();
+                widget.tempAmplifierController.update();
               },
             );
           }),

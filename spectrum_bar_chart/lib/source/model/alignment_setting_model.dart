@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
+
 
 class AlignmentSettingModel {
   RxDouble gainValue;

@@ -2,12 +2,8 @@
 
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:spectrum_bar_chart/source/constant/app_constant.dart';
-
-import 'app_shimmer_effect.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
+import 'package:spectrum_bar_chart/source/ui/app_shimmer_effect.dart';
 
 class AppImageAsset extends StatelessWidget {
   final String? image;
