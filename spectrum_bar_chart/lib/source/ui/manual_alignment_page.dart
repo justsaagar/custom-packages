@@ -8,7 +8,7 @@ import 'package:spectrum_bar_chart/source/helper/enum_helper.dart';
 import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
 import 'package:spectrum_bar_chart/source/model/alignment_setting_model.dart';
 import 'package:spectrum_bar_chart/source/pages/AmplifierConfigurationHelper.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/data_amplifier.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_image_assets.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';

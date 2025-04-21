@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'amplifier.g.dart';
+part 'data_amplifier.g.dart';
 
 @JsonSerializable()
 class DsManualAlignmentModel {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier/amplifier.dart';
+import 'package:spectrum_bar_chart/source/serialized/amplifier/data_amplifier.dart';
 
 abstract class AmplifierRepository {
   Future<Map<String, dynamic>> dsAutoAlignmentSpectrumData({
