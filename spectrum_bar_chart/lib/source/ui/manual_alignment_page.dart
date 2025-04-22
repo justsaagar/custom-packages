@@ -307,7 +307,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
           children: [
             Container(width: widget.screenLayoutType==ScreenLayoutType.mobile?75:100,
               margin: const EdgeInsets.only(top: 5),
-              child: Text(
+              child: AppText(
                 label,
                 style: const TextStyle(
                   fontSize: 14,
@@ -339,7 +339,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
                         ),
                         buttonName: "-",
                       ),
-                      Text(minValue.toStringAsFixed(1),style: const TextStyle(
+                      AppText(minValue.toStringAsFixed(1),style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         fontFamily: AppAssetsConstants.openSans,
@@ -400,7 +400,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
 
                         fontSize: 15,
                       ),
-                      Text(maxValue.toStringAsFixed(1),style: const TextStyle(
+                      AppText(maxValue.toStringAsFixed(1),style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         fontFamily: AppAssetsConstants.openSans,
@@ -430,7 +430,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
         ),
         if(errorMessage.value.isNotEmpty) Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Text(
+          child: AppText(
             errorMessage.value,
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -580,7 +580,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
         children: [
           const Icon(Icons.info, color: Colors.grey,),
           const SizedBox(width: 5,),
-          Text(
+          AppText(
             'Click Save to save the values permanently',
             style: TextStyle(
                 fontFamily: AppAssetsConstants.openSans,
@@ -598,7 +598,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: Center(
-        child: Text(
+        child: AppText(
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -690,7 +690,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
         "title=$title---Value--$value---isEQUView=$isEQUView---isSelected=$isSelected");
     return Column(
       children: [
-        Text(
+        AppText(
           title,
           style: TextStyle(
             fontSize: 11,
@@ -721,7 +721,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
           ),
         ),
         const SizedBox(height: 3),
-        Text(
+        AppText(
           value,
           style: TextStyle(
             fontSize: 11,
@@ -760,7 +760,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
             child: Container(
               width: 200,
               alignment: Alignment.center,
-              child: Text(
+              child: AppText(
                 getSelectedStageName(dsManualValues.stage),
                 style: TextStyle(
                     fontFamily: AppAssetsConstants.openSans,
@@ -822,14 +822,14 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0).copyWith(bottom: 20),
       child: Column(
         children: [
-          Text(
+          AppText(
             title,
             style: const TextStyle(
                 fontFamily: AppAssetsConstants.openSans,
                 fontSize: 15,
                 fontWeight: FontWeight.w500),
           ),
-          Text('[$max]',
+          AppText('[$max]',
               style: const TextStyle(
                   fontFamily: AppAssetsConstants.openSans,
                   fontSize: 14,
@@ -859,7 +859,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
               ),
             ),
           ),
-          Text("[$min]",
+          AppText("[$min]",
               style: TextStyle(
                   fontFamily: AppAssetsConstants.openSans,
                   fontSize: 14,
@@ -996,7 +996,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   }
 
   titleText(String title) {
-    return Text(
+    return AppText(
       title,
       textAlign: TextAlign.center,
       style: TextStyle(

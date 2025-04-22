@@ -29,6 +29,8 @@ export 'package:spectrum_bar_chart/source/pages/amplifiers/amplifiers_details/am
 export 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
 export 'package:spectrum_bar_chart/source/ui/app_image_assets.dart';
 export 'package:flutter/services.dart';
+export 'package:spectrum_bar_chart/source/ui/app_text.dart';
+
 
 
 

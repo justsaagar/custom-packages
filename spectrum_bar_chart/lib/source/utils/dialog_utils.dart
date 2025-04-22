@@ -40,7 +40,7 @@ class DialogUtils {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AppText(
                         title,
                         maxLines: 1,
                         style: TextStyle(
@@ -65,7 +65,7 @@ class DialogUtils {
             padding: const EdgeInsets.only(left: 24, top: 8, right: 24, bottom: 14),
             child: Container(
               width: MediaQuery.of(context).size.width * 0.3,
-              child: Text(
+              child: AppText(
                 description,
                 style: TextStyle(
                     color: AppColorConstants.colorAppbar,

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:spectrum_bar_chart/app_import.dart';
 
 
-
 final getIt = GetIt.instance;
 class AmpDsAlignmentDependencies {
 
@@ -97,6 +96,8 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    buildTitleView(),
+                    SizedBox(height: getSize(15)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -136,10 +137,41 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
               );
             }
             amplifierConfigurationHelper?.spectrumApiStatus = ApiStatus.failed;
-            return const Center(child: Text('No data or API URL provided'));
+            return const Center(child: AppText('No data or API URL provided'));
           },
         );
       },
+    );
+  }
+
+  Widget buildTitleView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          children: [
+            AppText(
+              "DS Alignment",
+              style: TextStyle(
+                  fontSize: getSize(24),
+                  fontFamily: AppAssetsConstants.openSans,
+                  color: AppColorConstants.colorPrimary,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(width: getSize(10)),
+            Flexible(
+              child: Container(
+                  height: getSize(20),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: AppColorConstants.colorBlack, width: 0.4)))),
+            ),
+            //if (screenLayoutType == ScreenLayoutType.desktop) dSRefreshButtonView()
+          ],
+        ),
+        SizedBox(height: getSize(10)),
+        // startAutoAlignmentWidget()
+      ],
     );
   }
 
@@ -201,7 +233,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                     Icon(Icons.error_outline, color: AppColorConstants.colorRedLight, size: 15),
                     const SizedBox(width: 5),
                     Flexible(
-                      child: Text(
+                      child: AppText(
                         "${amplifierConfigurationHelper?.downStreamAutoAlignmentError}",
                         style: TextStyle(
                           color: AppColorConstants.colorDarkBlue,
@@ -346,7 +378,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
+        AppText(
          'Enable Manual Mode',
           style: TextStyle(fontStyle:   FontStyle.italic,
               fontFamily: AppAssetsConstants.openSans,
@@ -532,7 +564,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
             Icon(Icons.info, color: Colors.grey),
             SizedBox(width: 5,),
             Flexible(
-              child: Text(
+              child: AppText(
                 "Click Save to save the Values permanently",
                 style: TextStyle(
                     fontFamily: 'OpenSans',
@@ -576,7 +608,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
                   color: AppColorConstants.colorRedLight, size: 15),
               const SizedBox(width: 5),
               Flexible(
-                child: Text(
+                child: AppText(
                   errorMessage,
                   style: const TextStyle(
                     color: AppColorConstants.colorDarkBlue,
@@ -670,7 +702,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
       axisNameWidget: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          AppText(
             'MHz',
             style: TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
           ),
@@ -691,7 +723,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                     ),
                   ),
                 ),
-                const Text(
+                const AppText(
                   'Ref',
                   style: TextStyle(
                     color: Colors.black,
@@ -710,7 +742,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
                     ),
                   ),
                 ),
-                const Text(
+                const AppText(
                   'Level',
                   style: TextStyle(
                     color: Colors.black,
@@ -727,7 +759,7 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
         showTitles: true,
         getTitlesWidget: (value, meta) => Padding(
           padding: const EdgeInsets.only(top: 5),
-          child: Text(
+          child: AppText(
             '$value',
             style: dependencies.axisLabelTextStyle ?? TextStyle(fontSize: 12, color: Colors.grey[700]),
           ),
@@ -736,14 +768,14 @@ FlTitlesData buildFLTitlesData(AmpDsAlignmentDependencies dependencies) {
     ),
     leftTitles: AxisTitles(
       axisNameSize: 30,
-      axisNameWidget: Text(
+      axisNameWidget: AppText(
         'dBmV',
         style: TextStyle(color: AppColorConstants.colorH1, fontSize: 16),
       ),
       sideTitles: SideTitles(
         interval: 10,
         showTitles: true,
-        getTitlesWidget: (value, meta) => Text(
+        getTitlesWidget: (value, meta) => AppText(
           "$value",
           style: dependencies.axisLabelTextStyle,
         ),

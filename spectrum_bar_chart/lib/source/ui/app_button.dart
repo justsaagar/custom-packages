@@ -82,7 +82,7 @@ class AppButton extends StatelessWidget {
                   ),
                 )
               else
-                Text(
+                AppText(
                   buttonName,
                   style: TextStyle(
                       color: fontColor, fontSize: fontSize ?? 16, fontWeight: getMediumFontWeight(), fontFamily: fontFamily),

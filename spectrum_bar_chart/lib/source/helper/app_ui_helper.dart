@@ -65,7 +65,7 @@ errorMessageView({required String errorMessage,double ?padding}) {
                 color: AppColorConstants.colorRedLight, size: 15),
             const SizedBox(width: 5),
             Flexible(
-              child: Text(
+              child: AppText(
                 errorMessage,
                 style: TextStyle(
                   color: AppColorConstants.colorDarkBlue,

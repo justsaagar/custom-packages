@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:spectrum_bar_chart/source/controller/ds_amplifier_controller.dart';
-import 'package:spectrum_bar_chart/source/helper/rest_helper.dart';
-import 'package:spectrum_bar_chart/source/pages/amplifiers/amplifiers_details/amp_configuration/amp_ds_alignment/amp_ds_alignment.dart';
-import 'package:spectrum_bar_chart/source/serialized/amplifier_configuration/amplifier_configuration.dart';
+import 'package:spectrum_bar_chart/app_import.dart';
 
 class SpectrumDataChart extends StatefulWidget {
   const SpectrumDataChart({super.key});
@@ -37,7 +32,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       builder: (TempAmplifierController controller) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Spectrum Data Chart'),
+            title: const AppText('Spectrum Data Chart'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),

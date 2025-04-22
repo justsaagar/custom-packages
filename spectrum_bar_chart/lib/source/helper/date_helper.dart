@@ -19,7 +19,7 @@ Widget getTimeDurationView({
   return Align(alignment:alignment?? Alignment.centerRight,
     child: Padding(
       padding: const EdgeInsets.only(top: 6),
-      child: Text(
+      child: AppText(
           refreshStatus == ApiStatus.loading && onTapTime != null
               ? waitingMessage ?? 'Please wait refreshing data...'
               : difference != null
@@ -39,7 +39,7 @@ Widget getLastSeenView(DateTime ?lastUpdateTime, {Color? textColor, bool offline
     return Align(alignment: alignment??Alignment.centerRight,
       child: Padding(
         padding:  const EdgeInsets.only(right: 10,top:6),
-        child: Text(
+        child: AppText(
           "Last Updated: ${DateFormat(lastUpdateDateFormat).format(lastUpdateTime)}",
           style:  TextStyle(
               fontSize: 13,
