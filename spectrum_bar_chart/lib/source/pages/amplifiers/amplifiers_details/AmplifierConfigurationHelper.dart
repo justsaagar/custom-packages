@@ -89,7 +89,7 @@ class AmplifierConfigurationHelper{
               spectrumApiStatus = ApiStatus.success;
             } else {
               spectrumApiStatus = ApiStatus.failed;
-              dsSpectrumDataError= "${value['body'].message}";
+              dsSpectrumDataError= "Something went wrong";
               return;
             }
           } else {
