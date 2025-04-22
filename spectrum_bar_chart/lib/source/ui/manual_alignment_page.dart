@@ -54,7 +54,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: getSize(10), horizontal:widget.screenLayoutType==ScreenLayoutType.mobile?0: getSize(20)),
+      padding: EdgeInsets.symmetric(vertical: getSize(10), horizontal: getSize(10)),
       decoration: borderViewDecoration,
       child: Column(
         children: [
@@ -100,6 +100,8 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   //Refresh Button
   buildLastSeenWithRefreshButton() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(

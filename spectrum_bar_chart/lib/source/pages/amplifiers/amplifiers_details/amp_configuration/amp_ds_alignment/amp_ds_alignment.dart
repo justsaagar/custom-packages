@@ -263,7 +263,7 @@ class AmpDsAlignmentState extends State<AmpDsAlignment> {
     double height = (screenLayoutType == ScreenLayoutType.mobile) ? 630 : (!isSwitchOfAuto) ? 600 : 615;
     return Container(
       height: amplifierConfigurationHelper?.spectrumApiStatus == ApiStatus.success ? height : null,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
         border: Border.all(color: AppColorConstants.colorChart , width: 1.8),
@@ -792,6 +792,7 @@ FlGridData buildFlGridData(AmpDsAlignmentDependencies dependencies) {
   return FlGridData(
     show: true,
     horizontalInterval: 10,
+    drawVerticalLine: false,
     getDrawingHorizontalLine: (value) => const FlLine(
       color: Colors.grey,
       strokeWidth: 0.5,
