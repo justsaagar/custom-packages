@@ -1,5 +1,9 @@
 // ignore_for_file: deprecated_member_use
-import 'package:spectrum_bar_chart/app_import.dart';
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:spectrum_bar_chart/constant/app_constant.dart';
+import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
+import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 
 class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -18,7 +22,7 @@ class AppButton extends StatelessWidget {
   final double ?buttonWidth;
   final bool isActive;
   final ButtonStyle? buttonStyle;
-  final ApiStatus loadingStatus;
+  final bool loadingStatus;
 
   const AppButton({
     super.key,
@@ -38,7 +42,7 @@ class AppButton extends StatelessWidget {
     this.buttonWidth,
     this.isActive = true,
     this.buttonStyle,
-    this.loadingStatus = ApiStatus.initial,
+    this.loadingStatus = false,
   });
 
   @override
@@ -69,7 +73,7 @@ class AppButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (loadingStatus == ApiStatus.loading)
+              if (loadingStatus == true)
                 Lottie.asset(
                   AppAssetsConstants.loaderAnimation,
                   delegates: LottieDelegates(

@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:package_spectrum/spectrum_data.dart';
-import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository.dart';
-import 'package:spectrum_bar_chart/source/repository/amplifier/amplifier_repository_impl.dart';
 import 'package:toastification/toastification.dart';
 
-final getIt = GetIt.instance;
-
-init(){
-  getIt.registerSingleton<AmplifierRepository>(AmplifierRepositoryImpl());
-}
 
 void main() {
-  init();
   runApp(const MyApp());
 }
 
@@ -24,8 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
-      child: GetMaterialApp(
-        title: 'Flutter Demo',
+      child: MaterialApp(
+        title: 'Custom Spectrum Data Chart',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

@@ -1,4 +1,5 @@
-import 'package:spectrum_bar_chart/app_import.dart';
+import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/source/pages/spectrum_bar_chart.dart';
 
 class SpectrumDataChart extends StatefulWidget {
   const SpectrumDataChart({super.key});
@@ -8,40 +9,43 @@ class SpectrumDataChart extends StatefulWidget {
 }
 
 class _SpectrumDataChartState extends State<SpectrumDataChart> {
-
-
-  List<DSPointData> dsSpectrumDataPoints = [];
-  String deviceEui = '002926000002049a';
+  List <SpectrumChartItem> dataPoints = [
+    SpectrumChartItem(freq: 351, reference: 35.23, level: 36.1),
+    SpectrumChartItem(freq: 753, reference: 42.02, level: 41.4),
+    SpectrumChartItem(freq: 1005, reference: 44.83, level: 44.7),
+    SpectrumChartItem(freq: 1701, reference: 47.64, level: 47.8),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    debugLogs("Current Screen ------> $runtimeType");
-    Map<String, String> customHeaders = {};
-    Map<String,String> body = {};
-    final dependencies = AmpDsAlignmentDependencies(
+    final dependencies = SpectrumBarChartDependencies(
       isSwitchOfAuto: true,
-      deviceId: deviceEui,
-      customHeaders: customHeaders,
-      bodyMap: body,
-      context: context,
+      saveButtonPressed: () {},
+      revertButtonPressed: () {},
       maximumYAxisValue: 50,
       minimumYAxisValue: 0,
+      xAxisTitle: 'MHz',
+      yAxisTitle: 'dBmV',
+      isSaveRevertUnable: true,
+      saveRevertApiStatus: false,
+      isStartDownStream: false,
+      downStreamAutoAlignmentError: null,
+      // downStreamAutoAlignmentError: "Some thing wrong",
+      startAutoButtonPressed: () {},
+      refreshButtonPressed: () {},
+      lastStatusView: const Text("Last update Time is 1 min ago"),
     );
-    return GetBuilder(
-      init: TempAmplifierController(),
-      builder: (TempAmplifierController controller) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const AppText('Spectrum Data Chart'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AmpDsAlignment(
-              dependencies: dependencies,
-            ),
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Spectrum Data Chart'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SpectrumBarChart(
+          dataPoints: dataPoints,
+          dependencies: dependencies,
+        ),
+      ),
     );
   }
 }

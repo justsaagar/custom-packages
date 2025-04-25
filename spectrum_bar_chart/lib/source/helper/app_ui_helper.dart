@@ -1,18 +1,21 @@
-import 'package:spectrum_bar_chart/app_import.dart';
+import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/constant/app_constant.dart';
+import 'package:spectrum_bar_chart/source/helper/date_helper.dart';
+import 'package:spectrum_bar_chart/source/ui/app_text.dart';
+import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
 
-
-getSize(double val){
+double getSize(double val){
   return val;
 }
-
 getMediumBoldFontWeight(){
   return FontWeight.w600;
 }
-getMediumFontWeight(){
+FontWeight getMediumFontWeight(){
   return FontWeight.w500;
 }
+
 Widget buildLastSeenView({
-  ApiStatus? apiStatus,
+  bool? apiStatus,
   DateTime? onTapTime,
   Duration? difference,
   bool isShow = true,
@@ -81,4 +84,3 @@ errorMessageView({required String errorMessage,double ?padding}) {
     ),
   );
 }
-

@@ -1,5 +1,8 @@
-import 'package:spectrum_bar_chart/app_import.dart';
 
+
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:spectrum_bar_chart/constant/app_constant.dart';
 
 class AppLoader extends StatelessWidget {
   final Color loaderColor;

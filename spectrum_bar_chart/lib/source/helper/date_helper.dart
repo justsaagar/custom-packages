@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:spectrum_bar_chart/constant/app_constant.dart';
+import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 
-import 'package:spectrum_bar_chart/app_import.dart';
 
 
 
 String lastUpdateDateFormat = "MM-dd-yyyy hh:mm:ss a";
 
 Widget getTimeDurationView({
-  ApiStatus? refreshStatus,
+  bool? refreshStatus,
   DateTime? updateTime,
   DateTime? onTapTime,
   Duration? difference,
@@ -20,13 +22,13 @@ Widget getTimeDurationView({
     child: Padding(
       padding: const EdgeInsets.only(top: 6),
       child: AppText(
-          refreshStatus == ApiStatus.loading && onTapTime != null
+          refreshStatus == true && onTapTime != null
               ? waitingMessage ?? 'Please wait refreshing data...'
               : difference != null
               ? '${differenceMessage ?? 'The refresh completed in '}${difference.inSeconds}.${difference.inMilliseconds ~/ 10}s'
               : updateTime != null ? 'Last Updated: ${DateFormat(lastUpdateDateFormat).format(updateTime)}' : " not Defined show",
           style: TextStyle(
-              color: refreshStatus == ApiStatus.loading || textColor == null || difference == null ? AppColorConstants.colorAppbar : textColor,
+              color: refreshStatus == true || textColor == null || difference == null ? AppColorConstants.colorAppbar : textColor,
               fontWeight: FontWeight.w500,
               fontSize: 13,
               fontFamily: 'OpenSans')),

@@ -1,7 +1,6 @@
 // ignore_for_file: use_super_parameters
 
-import 'package:spectrum_bar_chart/app_import.dart';
-
+import 'package:flutter/material.dart';
 
 enum ScreenLayoutType { mobile, desktop , tablet ,monitor}
 
