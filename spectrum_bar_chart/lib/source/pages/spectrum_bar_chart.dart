@@ -101,13 +101,6 @@ class SpectrumBarChart extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: getSize(10)),
-                    Expanded(
-                      child: buildSpectrumBarChart(
-                          dataPoints: dataPoints,
-                          dependencies: dependencies,
-                          screenLayoutType: screenLayoutType
-                      ),
-                    ),
                     // Expanded(
                     //     child: ampInterstageValuesView()
                     // ),
@@ -121,11 +114,6 @@ class SpectrumBarChart extends StatelessWidget {
                     screenLayoutType: screenLayoutType
                 ),
                 SizedBox(height: getSize(10)),
-                buildSpectrumBarChart(
-                    dataPoints: dataPoints,
-                    dependencies: dependencies,
-                    screenLayoutType: screenLayoutType
-                ),
                 SizedBox(height: getSize(25)),
                 // ampInterstageValuesView(),
               ],
