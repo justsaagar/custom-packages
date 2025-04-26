@@ -36,8 +36,16 @@ class SpectrumBarChartDependencies {
   final bool isStartDownStream;
   final String? downStreamAutoAlignmentError;
   final VoidCallback startAutoButtonPressed;
-  final VoidCallback refreshButtonPressed;
-  final Widget lastStatusView;
+
+
+
+  /// Last update refresh text widget show ///
+ final String lastUpdateString;
+ final Color lastUpdateColor;
+ final VoidCallback onTapRefreshButton;
+
+
+
 
 
 
@@ -54,8 +62,9 @@ class SpectrumBarChartDependencies {
     required this.isStartDownStream,
     required this.downStreamAutoAlignmentError,
     required this.startAutoButtonPressed,
-    required this.refreshButtonPressed,
-    required this.lastStatusView,
+    required this.lastUpdateString,
+    required this.lastUpdateColor,
+    required this.onTapRefreshButton,
   });
 }
 
@@ -114,7 +123,6 @@ class SpectrumBarChart extends StatelessWidget {
                     screenLayoutType: screenLayoutType
                 ),
                 SizedBox(height: getSize(10)),
-                SizedBox(height: getSize(25)),
                 // ampInterstageValuesView(),
               ],
             ],
@@ -133,11 +141,38 @@ class SpectrumBarChart extends StatelessWidget {
       children: [
         if (errorMessage != null)
           Align(alignment: AlignmentDirectional.centerStart ,child: errorMessageView(errorMessage: errorMessage)),
-        dependencies.lastStatusView,
+        buildDsSpectrumLastSeenViewWithRefreshButton(),
       ],
     );
   }
 
+  /// Last update TIme View String show ///
+  Widget buildDsSpectrumLastSeenViewWithRefreshButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if(dependencies.downStreamAutoAlignmentError != null)
+          SizedBox(width: getSize(10))
+        else
+        Flexible(
+          child: buildLastSeenView(
+            messageString: dependencies.lastUpdateString,
+            textColor: dependencies.lastUpdateColor,
+          ),
+        ),
+        AppRefresh(
+          buttonColor: AppColorConstants.colorPrimary,
+          loadingStatus: dependencies.saveRevertApiStatus,
+          onPressed: dependencies.onTapRefreshButton,
+          enabled: true,
+        )
+      ],
+    );
+  }
+
+  /// Title View ///
   Widget buildTitleView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,

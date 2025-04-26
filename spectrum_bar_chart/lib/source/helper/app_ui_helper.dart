@@ -15,36 +15,21 @@ FontWeight getMediumFontWeight(){
 }
 
 Widget buildLastSeenView({
-  bool? apiStatus,
-  DateTime? onTapTime,
-  Duration? difference,
-  bool isShow = true,
-  DateTime? updateTime,
+  String? messageString,
   Color? textColor,
-  String? differenceMessage,
-  bool isOffline = false,
 }) {
-  if (isShow) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: getTimeDurationView(
-          differenceMessage: differenceMessage,
-          refreshStatus: apiStatus,
-          updateTime: updateTime,
-          onTapTime: onTapTime,
-          difference: difference,
-          textColor: textColor),
-    );
-  } else {
-    if (updateTime != null) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: getLastSeenView(updateTime, textColor: textColor, offline: isOffline),
-      );
-    } else {
-      return Container(height: 35);
-    }
-  }
+  return Align(alignment: Alignment.centerRight,
+    child: Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: AppText(
+          messageString ?? '',
+          style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 13,
+              fontFamily: 'OpenSans')),
+    ),
+  );
 }
 
 BoxDecoration borderViewDecoration = BoxDecoration(

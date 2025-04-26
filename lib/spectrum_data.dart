@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spectrum_bar_chart/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/pages/spectrum_bar_chart.dart';
 
 class SpectrumDataChart extends StatefulWidget {
@@ -16,6 +17,40 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
     DSPointData(freq: 1701, reference: 47.64, level: 47.8),
   ];
 
+  DateTime? dsSpectrumOnTapTime;
+  Duration ? dsSpectrumDifferenceTime;
+  bool dsSpectrumIsShowText = true;
+  DateTime? updateTime;
+  bool refreshStatus = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initialCall();
+
+  }
+  initialCall()async{
+    dsSpectrumIsShowText = true;
+    dsSpectrumOnTapTime = DateTime.now();
+    updateTime = DateTime.now();
+    refreshStatus = true;
+    setState(() {
+
+    });
+    await Future.delayed(Duration(seconds: 5));
+    refreshStatus = false;
+    dsSpectrumDifferenceTime = DateTime.now().difference(DateTime.now().subtract(const Duration(seconds: 5)));
+    setState(() {
+
+    });
+    await Future.delayed(Duration(seconds: 2));
+    dsSpectrumIsShowText = false;
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final dependencies = SpectrumBarChartDependencies(
@@ -32,8 +67,24 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       downStreamAutoAlignmentError: null,
       // downStreamAutoAlignmentError: "Some thing wrong",
       startAutoButtonPressed: () {},
-      refreshButtonPressed: () {},
-      lastStatusView: const Text("Last update Time is 1 min ago"),
+      lastUpdateColor: refreshStatus == true || dsSpectrumDifferenceTime == null ? AppColorConstants.colorAppbar : AppColorConstants.colorGrn,
+      lastUpdateString: !dsSpectrumIsShowText ? 'Last Updated: $updateTime' : (refreshStatus == true && dsSpectrumOnTapTime != null
+          ? 'Please wait refreshing data...'
+          : dsSpectrumDifferenceTime != null
+          ? '${ 'The refresh completed in '}${dsSpectrumDifferenceTime?.inSeconds}.${dsSpectrumDifferenceTime!.inMilliseconds ~/ 10}s'
+          : updateTime != null ? 'Last Updated: $updateTime' : " not Defined show"),
+      onTapRefreshButton: () {
+        setState(() {
+          dataPoints = [
+            DSPointData(freq: 351, reference: 33.23, level: 18.1),
+            DSPointData(freq: 753, reference: 30.02, level: 23.4),
+            DSPointData(freq: 1005, reference: 55.83, level: 45.7),
+            DSPointData(freq: 1701, reference: 22.64, level: 37.8),
+          ];
+        });
+        initialCall();
+        Future.delayed(const Duration(seconds: 5), () {});
+      },
     );
     return Scaffold(
       appBar: AppBar(
