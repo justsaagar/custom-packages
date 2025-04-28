@@ -153,7 +153,7 @@ class SpectrumBarChart extends StatelessWidget {
   /// Last update TIme View String show ///
   Widget buildDsSpectrumLastSeenViewWithRefreshButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
