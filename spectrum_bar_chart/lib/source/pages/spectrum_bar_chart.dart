@@ -32,10 +32,11 @@ class SpectrumBarChartDependencies {
   final String xAxisTitle;
   final String yAxisTitle;
   final bool isSaveRevertUnable;
-  final bool saveRevertApiStatus;
+  final bool spectrumApiStatus;
   final bool isStartDownStream;
   final String? downStreamAutoAlignmentError;
   final VoidCallback startAutoButtonPressed;
+  final bool saveRevertApiStatusOfAutoAlign;
 
 
 
@@ -58,13 +59,14 @@ class SpectrumBarChartDependencies {
     required this.xAxisTitle,
     required this.yAxisTitle,
     required this.isSaveRevertUnable,
-    required this.saveRevertApiStatus,
+    required this.spectrumApiStatus,
     required this.isStartDownStream,
     required this.downStreamAutoAlignmentError,
     required this.startAutoButtonPressed,
     required this.lastUpdateString,
     required this.lastUpdateColor,
     required this.onTapRefreshButton,
+    required this.saveRevertApiStatusOfAutoAlign,
   });
 }
 
@@ -164,7 +166,7 @@ class SpectrumBarChart extends StatelessWidget {
         ),
         AppRefresh(
           buttonColor: AppColorConstants.colorPrimary,
-          loadingStatus: dependencies.saveRevertApiStatus,
+          loadingStatus: dependencies.spectrumApiStatus,
           onPressed: dependencies.onTapRefreshButton,
           enabled: true,
         )
@@ -276,7 +278,7 @@ class SpectrumBarChart extends StatelessWidget {
   }) {
     double height = (screenLayoutType == ScreenLayoutType.mobile) ? 630 : (screenLayoutType == ScreenLayoutType.tablet) ? 600 : 615;
     return Container(
-      height: height,
+      height: dependencies.spectrumApiStatus == true ? height : null,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
@@ -287,75 +289,77 @@ class SpectrumBarChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
-                        maxY: dependencies.maximumYAxisValue,
-                        minY: dependencies.minimumYAxisValue,
-                        barGroups: dataPoints.map((point) {
-                          return BarChartGroupData(
-                            showingTooltipIndicators: [0, 1],
-                            x: point.freq.toInt(),
-                            barRods: [
-                              BarChartRodData(
-                                toY: point.reference,
-                                color: AppColorConstants.colorRefChartBorder,
-                                width: 10,
-                                borderRadius:const BorderRadius.only(
-                                  topLeft: Radius.circular(4),
-                                  topRight: Radius.circular(4),
+          if(dependencies.spectrumApiStatus == true) ...[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: BarChart(
+                        BarChartData(
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: dependencies.maximumYAxisValue,
+                          minY: dependencies.minimumYAxisValue,
+                          barGroups: dataPoints.map((point) {
+                            return BarChartGroupData(
+                              showingTooltipIndicators: [0, 1],
+                              x: point.freq.toInt(),
+                              barRods: [
+                                BarChartRodData(
+                                  toY: point.reference,
+                                  color: AppColorConstants.colorRefChartBorder,
+                                  width: 10,
+                                  borderRadius:const BorderRadius.only(
+                                    topLeft: Radius.circular(4),
+                                    topRight: Radius.circular(4),
+                                  ),
                                 ),
-                              ),
-                              BarChartRodData(
-                                toY: point.level,
-                                color: AppColorConstants.colorLevelChartBorder,
-                                width: 10,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4),
-                                  topRight: Radius.circular(4),
+                                BarChartRodData(
+                                  toY: point.level,
+                                  color: AppColorConstants.colorLevelChartBorder,
+                                  width: 10,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4),
+                                    topRight: Radius.circular(4),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                        titlesData: buildFLTitlesData(dependencies),
-                        barTouchData: buildBarTouchData(dependencies),
-                        gridData: buildFlGridData(dependencies),
-                        borderData: FlBorderData(
-                          border: const Border(
-                            bottom: BorderSide(color: Colors.grey, width: 1),
-                            left: BorderSide(color: Colors.grey, width: 1),
+                              ],
+                            );
+                          }).toList(),
+                          titlesData: buildFLTitlesData(dependencies),
+                          barTouchData: buildBarTouchData(dependencies),
+                          gridData: buildFlGridData(dependencies),
+                          borderData: FlBorderData(
+                            border: const Border(
+                              bottom: BorderSide(color: Colors.grey, width: 1),
+                              left: BorderSide(color: Colors.grey, width: 1),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                if (dependencies.isSwitchOfAuto)
-                  Column(
-                    children: [
-                      saveRevertButtonOfAutoAlignWidget(),
-                      saveRevertInfo()
-                    ],
-                  ),
-              ],
+                  if (dependencies.isSwitchOfAuto)
+                    Column(
+                      children: [
+                        saveRevertButtonOfAutoAlignWidget(),
+                        saveRevertInfo()
+                      ],
+                    ),
+                ],
+              ),
             ),
-          ),
-          refreshingBar(),
+          ],
+          // refreshingBar(),
         ],
       ),
     );
   }
 
   saveRevertButtonOfAutoAlignWidget() {
-    if(dependencies.saveRevertApiStatus == true) {
+    if(dependencies.saveRevertApiStatusOfAutoAlign == true) {
       return const SizedBox(
           height: 85, width: 50, child: AppLoader());
     }
@@ -372,7 +376,6 @@ class SpectrumBarChart extends StatelessWidget {
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Save",
             fontSize: 16,
-            loadingStatus: dependencies.saveRevertApiStatus,
             onPressed: !dependencies.isSaveRevertUnable ? null : dependencies.saveButtonPressed,
             fontFamily: AppAssetsConstants.openSans,
           ),
@@ -388,7 +391,6 @@ class SpectrumBarChart extends StatelessWidget {
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Revert",
             fontSize: 16,
-            loadingStatus: dependencies.saveRevertApiStatus,
             onPressed: !dependencies.isSaveRevertUnable ? null : dependencies.revertButtonPressed,
             fontFamily: AppAssetsConstants.openSans,
           ),
