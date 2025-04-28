@@ -440,8 +440,8 @@ BarTouchData buildBarTouchData(SpectrumBarChartDependencies dependencies) {
       getTooltipItem: (group, groupIndex, rod, rodIndex) {
         return BarTooltipItem(
           rod.toY == 0 ? " " : (rodIndex == 0 ? rod.toY.toStringAsFixed(2).padRight(18) : rod.toY.toStringAsFixed(2).padLeft(18)),
-          const TextStyle(
-            color: Colors.black,
+          TextStyle(
+            color: rodIndex == 0 ? AppColorConstants.colorRefChartBorder : AppColorConstants.colorLevelChartBorder,
             fontSize: 12,
             fontWeight: FontWeight.w900,
           ),
@@ -482,13 +482,13 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
                     ),
                   ),
                 ),
-                const AppText(
+                AppText(
                   'Ref',
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      color: AppColorConstants.colorBlack,
+                      fontSize: 13,
+                      fontFamily: AppAssetsConstants.notoSans,
+                      fontWeight: getMediumBoldFontWeight()),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -501,13 +501,13 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
                     ),
                   ),
                 ),
-                const AppText(
+                AppText(
                   'Level',
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal,
-                  ),
+                      color: AppColorConstants.colorBlack,
+                      fontFamily: AppAssetsConstants.notoSans,
+                      fontSize: 13,
+                      fontWeight: getMediumBoldFontWeight()),
                 ),
               ],
             ),
@@ -520,8 +520,8 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
           padding: const EdgeInsets.only(top: 5),
           child: AppText(
             "$value",
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: Colors.grey[700],
               fontSize: 12,
               fontWeight: FontWeight.w900,
             ),
@@ -533,9 +533,9 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
       axisNameSize: 30,
       axisNameWidget: AppText(
         dependencies.yAxisTitle,
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 16,
+        style: TextStyle(
+          color: AppColorConstants.colorH1,
+          fontSize: 13,
         ),
       ),
       sideTitles: SideTitles(
@@ -543,8 +543,8 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
         showTitles: true,
         getTitlesWidget: (value, _) => AppText(
           "$value",
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color:Colors.grey[700],
             fontSize: 12,
             fontWeight: FontWeight.w900,
           ),

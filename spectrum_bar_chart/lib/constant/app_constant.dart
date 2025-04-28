@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppAssetsConstants {
   static const String openSans = 'OpenSans';
+  static const String notoSans = 'Notosans';
+
 
   static const String animationPath = 'packages/spectrum_bar_chart/assets/animations/';
   static const String iconPath = 'packages/spectrum_bar_chart/assets/ic/';

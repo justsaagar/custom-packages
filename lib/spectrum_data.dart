@@ -35,7 +35,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
       saveButtonPressed: () {},
       revertButtonPressed: () {},
       isSaveRevertUnable: true,
-      spectrumApiStatus: true,
+      spectrumApiStatus: false,
       isStartDownStream: false,
       downStreamAutoAlignmentError: null,
       // downStreamAutoAlignmentError: "Some thing wrong",
