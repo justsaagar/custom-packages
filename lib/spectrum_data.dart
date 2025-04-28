@@ -48,6 +48,7 @@ class _SpectrumDataChartState extends State<SpectrumDataChart> {
           ? '${ 'The refresh completed in '}${dsSpectrumDifferenceTime?.inSeconds}.${dsSpectrumDifferenceTime!.inMilliseconds ~/ 10}s'
           : updateTime != null ? 'Last Updated: $updateTime' : " not Defined show"),
       onTapRefreshButton: () {},
+      isRefreshEnable: true,
     );
     return Scaffold(
       appBar: AppBar(

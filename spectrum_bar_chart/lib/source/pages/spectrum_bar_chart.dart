@@ -44,6 +44,7 @@ class SpectrumBarChartDependencies {
  final String lastUpdateString;
  final Color lastUpdateColor;
  final VoidCallback onTapRefreshButton;
+ final bool isRefreshEnable;
 
 
 
@@ -67,6 +68,7 @@ class SpectrumBarChartDependencies {
     required this.lastUpdateColor,
     required this.onTapRefreshButton,
     required this.saveRevertApiStatusOfAutoAlign,
+    required this.isRefreshEnable,
   });
 }
 
@@ -168,7 +170,7 @@ class SpectrumBarChart extends StatelessWidget {
           buttonColor: AppColorConstants.colorPrimary,
           loadingStatus: dependencies.spectrumApiStatus,
           onPressed: dependencies.onTapRefreshButton,
-          enabled: true,
+          enabled: dependencies.isRefreshEnable,
         )
       ],
     );
