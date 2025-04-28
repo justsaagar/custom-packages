@@ -25,8 +25,8 @@ class SpectrumChartItem {
 
 class SpectrumBarChartDependencies {
   final bool isSwitchOfAuto;
-  final VoidCallback saveButtonPressed;
-  final VoidCallback revertButtonPressed;
+  final VoidCallback? saveButtonPressed;
+  final VoidCallback? revertButtonPressed;
   final double maximumYAxisValue;
   final double minimumYAxisValue;
   final String xAxisTitle;
@@ -35,7 +35,7 @@ class SpectrumBarChartDependencies {
   final bool spectrumApiStatus;
   final bool isStartDownStream;
   final String? downStreamAutoAlignmentError;
-  final VoidCallback startAutoButtonPressed;
+  final VoidCallback? startAutoButtonPressed;
   final bool saveRevertApiStatusOfAutoAlign;
 
 
@@ -352,7 +352,7 @@ class SpectrumBarChart extends StatelessWidget {
               ),
             ),
           ],
-          // refreshingBar(),
+          refreshingBar(),
         ],
       ),
     );
