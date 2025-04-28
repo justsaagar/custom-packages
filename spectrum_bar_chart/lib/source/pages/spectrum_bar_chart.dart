@@ -280,7 +280,7 @@ class SpectrumBarChart extends StatelessWidget {
   }) {
     double height = (screenLayoutType == ScreenLayoutType.mobile) ? 630 : (screenLayoutType == ScreenLayoutType.tablet) ? 600 : 615;
     return Container(
-      height: dependencies.spectrumApiStatus == true ? height : null,
+      height: dependencies.spectrumApiStatus == true ?  null : height,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9),
@@ -291,7 +291,7 @@ class SpectrumBarChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if(dependencies.spectrumApiStatus == true) ...[
+          if(dependencies.spectrumApiStatus == false) ...[
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
