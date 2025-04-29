@@ -238,7 +238,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
     return Card(color: AppColorConstants.colorWhite,
       elevation: 6,
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==AppScreenLayoutType.mobile?50:30),
+        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==AppScreenLayoutType.mobile?10:30),
         child: Stack(alignment: Alignment.center,
           children: [
             Column(
