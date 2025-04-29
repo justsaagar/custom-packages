@@ -10,6 +10,7 @@ import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
 import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
+import 'package:spectrum_bar_chart/source/ui/manual_alignment_page.dart';
 
 class SpectrumChartItem {
   final int freq;
@@ -38,8 +39,6 @@ class SpectrumBarChartDependencies {
   final VoidCallback? startAutoButtonPressed;
   final bool saveRevertApiStatusOfAutoAlign;
 
-
-
   /// Last update refresh text widget show ///
  final String lastUpdateString;
  final Color lastUpdateColor;
@@ -47,9 +46,31 @@ class SpectrumBarChartDependencies {
  final bool isRefreshEnable;
 
 
+ /// Manual Alignment Interstage ///
+  final bool isOffLineInterStage;
+  final Function onTapWrite;
+  final Function onTapSave;
+  final Function onTapRevert;
+  final Function onRefreshClicked;
+  final Widget buildSwitchButtonView; /// For manual alignment interstage value Add chip ///
+  final ScreenLayoutType screenLayoutType;
 
-
-
+  /// Manual Alignment View Manage /////
+  final String gainErrorMessage;
+  final String tiltErrorMessage;
+  final TextEditingController gainTextController;
+  final TextEditingController tiltTextController;
+  final VoidCallback handleButtonPress;
+  final double gainValue;
+  final double tiltValue;
+  final bool isSaveRevertEnable;
+  final bool manualAlignmentApiStatus;
+  final String manualAlignmentError;
+  final double gainMaxVal;
+  final double gainMinVal;
+  final double tiltMaxVal;
+  final double tiltMinVal;
+  final VoidCallback updateValue;
 
   SpectrumBarChartDependencies({
     required this.isSwitchOfAuto,
@@ -69,6 +90,32 @@ class SpectrumBarChartDependencies {
     required this.onTapRefreshButton,
     required this.saveRevertApiStatusOfAutoAlign,
     required this.isRefreshEnable,
+
+    /// Manual Alignment Interstage ///
+    required this.isOffLineInterStage,
+    required this.onTapWrite,
+    required this.onTapSave,
+    required this.onTapRevert,
+    required this.onRefreshClicked,
+    required this.buildSwitchButtonView,
+    required this.screenLayoutType,
+
+    /// /// Manual Alignment View Manage /////
+      required this.gainErrorMessage,
+      required this.tiltErrorMessage,
+      required this.gainTextController,
+      required this.tiltTextController,
+      required this.handleButtonPress,
+      required this.gainValue,
+      required this.tiltValue,
+      required this.isSaveRevertEnable,
+      required this.manualAlignmentApiStatus,
+      required this.manualAlignmentError,
+      required this.gainMaxVal,
+      required this.gainMinVal,
+      required this.tiltMaxVal,
+      required this.tiltMinVal,
+      required this.updateValue,
   });
 }
 
@@ -114,9 +161,9 @@ class SpectrumBarChart extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: getSize(10)),
-                    // Expanded(
-                    //     child: ampInterstageValuesView()
-                    // ),
+                    Expanded(
+                        child: ampInterstageValuesView()
+                    ),
                   ],
                 )
               ] else ...[
@@ -127,7 +174,7 @@ class SpectrumBarChart extends StatelessWidget {
                     screenLayoutType: screenLayoutType
                 ),
                 SizedBox(height: getSize(10)),
-                // ampInterstageValuesView(),
+                ampInterstageValuesView(),
               ],
             ],
           ),
@@ -135,6 +182,38 @@ class SpectrumBarChart extends StatelessWidget {
       },
     );
   }
+
+  /// Interstage View /////
+  Widget ampInterstageValuesView() {
+    return ManualAlignmentPage(
+      isSwitchOfAuto: dependencies.isSwitchOfAuto,
+      isDSAlignment: true,
+      screenLayoutType: dependencies.screenLayoutType,
+      isOffline : dependencies.isOffLineInterStage,
+      onTapWrite: dependencies.onTapWrite,
+      onTapSave: dependencies.onTapSave,
+      onTapRevert: dependencies.onTapRevert,
+      onRefreshClicked: dependencies.onRefreshClicked,
+      buttonView: dependencies.buildSwitchButtonView,
+      saveRevertApiStatus: dependencies.saveRevertApiStatusOfAutoAlign,
+      gainErrorMessage: dependencies.gainErrorMessage,
+      tiltErrorMessage: dependencies.tiltErrorMessage,
+      gainTextController: dependencies.gainTextController,
+      tiltTextController: dependencies.tiltTextController,
+      handleButtonPress: dependencies.handleButtonPress,
+      gainValue: dependencies.gainValue,
+      tiltValue: dependencies.tiltValue,
+      isSaveRevertEnable: dependencies.isSaveRevertEnable,
+      manualAlignmentApiStatus: dependencies.manualAlignmentApiStatus,
+      manualAlignmentError: dependencies.manualAlignmentError,
+      gainMaxVal: dependencies.gainMaxVal,
+      gainMinVal: dependencies.gainMinVal,
+      tiltMaxVal: dependencies.tiltMaxVal,
+      tiltMinVal: dependencies.tiltMinVal,
+      updateValue: dependencies.updateValue,
+    );
+  }
+
 
   /// Refresh Bar ///
   Widget refreshingBar() {
@@ -521,7 +600,7 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
           child: AppText(
             "$value",
             style: TextStyle(
-              color: Colors.grey[700],
+              color: AppColorConstants.colorH1,
               fontSize: 12,
               fontWeight: FontWeight.w900,
             ),
@@ -544,7 +623,7 @@ FlTitlesData buildFLTitlesData(SpectrumBarChartDependencies dependencies) {
         getTitlesWidget: (value, _) => AppText(
           "$value",
           style: TextStyle(
-            color:Colors.grey[700],
+            color: AppColorConstants.colorH1,
             fontSize: 12,
             fontWeight: FontWeight.w900,
           ),
