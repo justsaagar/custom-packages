@@ -7,7 +7,7 @@ import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
-import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
+import 'package:spectrum_bar_chart/source/ui/app_screen_layout_type.dart';
 import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
 import 'package:spectrum_bar_chart/source/ui/manual_alignment_page.dart';
@@ -53,7 +53,7 @@ class SpectrumBarChartDependencies {
   final Function onTapRevert;
   final Function onRefreshClicked;
   final Widget buildSwitchButtonView; /// For manual alignment interstage value Add chip ///
-  final ScreenLayoutType screenLayoutType;
+  final AppScreenLayoutType screenLayoutType;
 
   /// Manual Alignment View Manage /////
   final String gainErrorMessage;
@@ -132,7 +132,7 @@ class SpectrumBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late ScreenLayoutType screenLayoutType;
+    late AppScreenLayoutType screenLayoutType;
     return ScreenLayoutTypeBuilder(
       builder: (context, screenType, constraints) {
         screenLayoutType = screenType;
@@ -148,7 +148,7 @@ class SpectrumBarChart extends StatelessWidget {
                   startAutoAlignmentWidget(),
                 ],
               ),
-              if (screenType == ScreenLayoutType.desktop) ...[
+              if (screenType == AppScreenLayoutType.desktop) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,9 +355,9 @@ class SpectrumBarChart extends StatelessWidget {
   Widget buildSpectrumBarChart({
     required List<SpectrumChartItem> dataPoints,
     required SpectrumBarChartDependencies dependencies,
-    required ScreenLayoutType screenLayoutType
+    required AppScreenLayoutType screenLayoutType
   }) {
-    double height = (screenLayoutType == ScreenLayoutType.mobile) ? 630 : (screenLayoutType == ScreenLayoutType.tablet) ? 600 : 615;
+    double height = (screenLayoutType == AppScreenLayoutType.mobile) ? 630 : (screenLayoutType == AppScreenLayoutType.tablet) ? 600 : 615;
     return Container(
       height: dependencies.spectrumApiStatus == true ?  null : height,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 10),

@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-enum ScreenLayoutType { mobile, desktop , tablet ,monitor}
+enum AppScreenLayoutType { mobile, desktop , tablet ,monitor}
 
 class ScreenLayoutTypeBuilder extends StatelessWidget {
-  final Widget Function(BuildContext, ScreenLayoutType,BoxConstraints) builder;
+  final Widget Function(BuildContext, AppScreenLayoutType,BoxConstraints) builder;
 
   const ScreenLayoutTypeBuilder({Key? key, required this.builder}) : super(key: key);
 
@@ -15,11 +15,11 @@ class ScreenLayoutTypeBuilder extends StatelessWidget {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         if (width < 750) {
-          return builder(context, ScreenLayoutType.mobile, constraints);
+          return builder(context, AppScreenLayoutType.mobile, constraints);
         } else if (width < 900) {
-          return builder(context, ScreenLayoutType.tablet, constraints);
+          return builder(context, AppScreenLayoutType.tablet, constraints);
         }  else {
-          return builder(context, ScreenLayoutType.desktop, constraints);
+          return builder(context, AppScreenLayoutType.desktop, constraints);
         }
       },
     );

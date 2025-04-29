@@ -8,14 +8,14 @@ import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_image_assets.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
 import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
-import 'package:spectrum_bar_chart/source/ui/app_screen_layout.dart';
+import 'package:spectrum_bar_chart/source/ui/app_screen_layout_type.dart';
 import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 
 
 class ManualAlignmentPage extends StatefulWidget {
 
   final bool isSwitchOfAuto;
-  final ScreenLayoutType screenLayoutType;
+  final AppScreenLayoutType screenLayoutType;
   final Function onTapWrite;
   final Function onRefreshClicked;
   final Function onTapSave;
@@ -111,7 +111,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   Widget build(BuildContext context) {
     return Container(
       padding:
-      EdgeInsets.symmetric(vertical: getSize(10), horizontal:widget.screenLayoutType==ScreenLayoutType.mobile ? 0: getSize(20)),
+      EdgeInsets.symmetric(vertical: getSize(10), horizontal:widget.screenLayoutType==AppScreenLayoutType.mobile ? 0: getSize(20)),
       decoration: borderViewDecoration,
       child: Column(
         children: [
@@ -130,7 +130,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   Widget refreshingBar() {
     final String? errorMessage =
         widget.manualAlignmentError;
-    bool isDesktop = widget.screenLayoutType == ScreenLayoutType.desktop;
+    bool isDesktop = widget.screenLayoutType == AppScreenLayoutType.desktop;
     return Column(
       children: [
         if (!widget.isDSAlignment && isDesktop)
@@ -238,7 +238,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
     return Card(color: AppColorConstants.colorWhite,
       elevation: 6,
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==ScreenLayoutType.mobile?50:30),
+        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==AppScreenLayoutType.mobile?50:30),
         child: Stack(alignment: Alignment.center,
           children: [
             Column(
@@ -343,7 +343,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(width: widget.screenLayoutType==ScreenLayoutType.mobile?75:100,
+            Container(width: widget.screenLayoutType==AppScreenLayoutType.mobile?75:100,
               margin: const EdgeInsets.only(top: 5),
               child: AppText(
                 label,
@@ -362,7 +362,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
               children: [
                 // Minus Button
                 SizedBox(
-                  width: widget.screenLayoutType==ScreenLayoutType.mobile?30:40,
+                  width: widget.screenLayoutType==AppScreenLayoutType.mobile?30:40,
                   child: Column(
                     children: [
                       AppButton(
@@ -388,7 +388,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
 
                 // Value Display
                 Container(
-                  width:widget.screenLayoutType==ScreenLayoutType.mobile?65:80,
+                  width:widget.screenLayoutType==AppScreenLayoutType.mobile?65:80,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
