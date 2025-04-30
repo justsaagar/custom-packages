@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:spectrum_bar_chart/constant/app_constant.dart';
 import 'package:spectrum_bar_chart/source/helper/app_ui_helper.dart';
-import 'package:spectrum_bar_chart/source/pages/manual_alignment_view.dart';
 import 'package:spectrum_bar_chart/source/pages/spectrum_bar_chart_dependencies.dart';
 import 'package:spectrum_bar_chart/source/ui/app_button.dart';
 import 'package:spectrum_bar_chart/source/ui/app_loader.dart';
@@ -12,7 +11,6 @@ import 'package:spectrum_bar_chart/source/ui/app_refresh.dart';
 import 'package:spectrum_bar_chart/source/ui/app_screen_layout_type.dart';
 import 'package:spectrum_bar_chart/source/ui/app_text.dart';
 import 'package:spectrum_bar_chart/source/ui/custom_error_view.dart';
-import 'package:spectrum_bar_chart/source/ui/manual_alignment_page.dart';
 
 class SpectrumChartItem {
   final int freq;
@@ -28,106 +26,34 @@ class SpectrumChartItem {
 
 
 class SpectrumBarChart extends StatelessWidget {
-  final List<SpectrumChartItem>? dataPoints;
-  final SpectrumBarChartDependencies? dependencies;
-  final ManualAlignmentViewDependencies? manualAlignmentViewDependencies;
+  final List<SpectrumChartItem> dataPoints;
+  final SpectrumBarChartDependencies dependencies;
 
 
   const SpectrumBarChart({
     super.key,
-    this.dataPoints,
-    this.dependencies,
-    this.manualAlignmentViewDependencies,
+    required this.dataPoints,
+    required this.dependencies,
   });
 
   @override
   Widget build(BuildContext context) {
     late AppScreenLayoutType screenLayoutType;
-    return ScreenLayoutTypeBuilder(
-      builder: (context, screenType, constraints) {
-        screenLayoutType = screenType;
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildTitleView(),
-              SizedBox(height: getSize(15)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  startAutoAlignmentWidget(),
-                ],
-              ),
-              if (screenType == AppScreenLayoutType.desktop) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: buildSpectrumBarChart(
-                          dataPoints: dataPoints!,
-                          dependencies: dependencies!,
-                          screenLayoutType: screenLayoutType
-                      ),
-                    ),
-                    SizedBox(width: getSize(10)),
-                    Expanded(
-                        child: ampInterstageValuesView()
-                    ),
-                  ],
-                )
-              ] else ...[
-                /// ToDo : Commented old chart and update with custom package
-                buildSpectrumBarChart(
-                    dataPoints: dataPoints!,
-                    dependencies: dependencies!,
-                    screenLayoutType: screenLayoutType
-                ),
-                SizedBox(height: getSize(10)),
-                ampInterstageValuesView(),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  /// Interstage View /////
-  Widget ampInterstageValuesView() {
-    return ManualAlignmentPage(
-      isSwitchOfAuto: dependencies?.isSwitchOfAuto ?? false,
-      saveRevertApiStatus: dependencies?.saveRevertApiStatusOfAutoAlign ?? false,
-      isDSAlignment: true,
-      screenLayoutType: manualAlignmentViewDependencies?.screenLayoutType ?? AppScreenLayoutType.desktop,
-      isOffline : manualAlignmentViewDependencies?.isOffLineInterStage ?? false,
-      onTapWrite: manualAlignmentViewDependencies?.onTapWrite ?? () {},
-      onTapSave: manualAlignmentViewDependencies?.onTapSave ?? () {},
-      onTapRevert: manualAlignmentViewDependencies?.onTapRevert ?? () {},
-      onRefreshClicked: manualAlignmentViewDependencies?.onRefreshClicked ?? () {},
-      buttonView: manualAlignmentViewDependencies?.buildSwitchButtonView ?? Container(),
-      gainErrorMessage: manualAlignmentViewDependencies?.gainErrorMessage ?? "",
-      tiltErrorMessage: manualAlignmentViewDependencies?.tiltErrorMessage ?? "",
-      gainTextController: manualAlignmentViewDependencies?.gainTextController ?? TextEditingController(),
-      tiltTextController: manualAlignmentViewDependencies?.tiltTextController ?? TextEditingController(),
-      handleButtonPress: manualAlignmentViewDependencies?.handleButtonPress ?? () {},
-      gainValue: manualAlignmentViewDependencies?.gainValue ?? 0.0,
-      tiltValue: manualAlignmentViewDependencies?.tiltValue ?? 0.0,
-      isSaveRevertEnable: manualAlignmentViewDependencies?.isSaveRevertEnable ?? false,
-      manualAlignmentApiStatus: manualAlignmentViewDependencies?.manualAlignmentApiStatus ?? false,
-      manualAlignmentError: manualAlignmentViewDependencies?.manualAlignmentError,
-      gainMaxVal: manualAlignmentViewDependencies?.gainMaxVal ?? 0,
-      gainMinVal: manualAlignmentViewDependencies?.gainMinVal ?? 0,
-      tiltMaxVal: manualAlignmentViewDependencies?.tiltMaxVal ?? 0,
-      tiltMinVal: manualAlignmentViewDependencies?.tiltMinVal ?? 0,
-      updateValue: manualAlignmentViewDependencies?.updateValue ?? () {},
-    );
+    return ScreenLayoutTypeBuilder(builder: (context, screenType, constraints) {
+      screenLayoutType = screenType;
+      return buildSpectrumBarChart(
+        dataPoints: dataPoints,
+        dependencies: dependencies,
+        screenLayoutType: screenLayoutType,
+      );
+    });
   }
 
 
   /// Refresh Bar ///
   Widget refreshingBar() {
-    final String? errorMessage = dependencies?.downStreamAutoAlignmentError;
+    final String? errorMessage = dependencies.downStreamAutoAlignmentError;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -146,56 +72,26 @@ class SpectrumBarChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if(dependencies?.downStreamAutoAlignmentError != null)
+        if(dependencies.downStreamAutoAlignmentError != null)
           SizedBox(width: getSize(10))
         else
         Flexible(
           child: buildLastSeenView(
-            messageString: dependencies?.lastUpdateString,
-            textColor: dependencies?.lastUpdateColor,
+            messageString: dependencies.lastUpdateString,
+            textColor: dependencies.lastUpdateColor,
           ),
         ),
         AppRefresh(
           buttonColor: AppColorConstants.colorPrimary,
-          loadingStatus: dependencies?.spectrumApiStatus ?? false,
-          onPressed: dependencies?.onTapRefreshButton,
-          enabled: dependencies?.isRefreshEnable ?? false,
+          loadingStatus: dependencies.spectrumApiStatus,
+          onPressed: dependencies.onTapRefreshButton,
+          enabled: dependencies.isRefreshEnable,
         )
       ],
     );
   }
 
-  /// Title View ///
-  Widget buildTitleView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          children: [
-            AppText(
-              "DS Alignment",
-              style: TextStyle(
-                  fontSize: getSize(24),
-                  fontFamily: AppAssetsConstants.openSans,
-                  color: AppColorConstants.colorPrimary,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(width: getSize(10)),
-            Flexible(
-              child: Container(
-                  height: getSize(20),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: AppColorConstants.colorBlack, width: 0.4)))),
-            ),
-            //if (screenLayoutType == ScreenLayoutType.desktop) dSRefreshButtonView()
-          ],
-        ),
-        SizedBox(height: getSize(10)),
-        // startAutoAlignmentWidget()
-      ],
-    );
-  }
+
 
   /// Auto Alignment Button ///
   Widget startAutoAlignmentWidget(){
@@ -205,28 +101,28 @@ class SpectrumBarChart extends StatelessWidget {
       children: [
         AppButton(
           buttonRadius: 9,
-          loadingStatus: dependencies?.isStartDownStream ?? false,
+          loadingStatus: dependencies.isStartDownStream,
           buttonHeight: getSize(35),
           buttonWidth: getSize(220),
-          fontColor: dependencies!.isSwitchOfAuto
+          fontColor: dependencies.isSwitchOfAuto
           // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online    /// Api Into online Offline Status manage
               ? AppColorConstants.colorWhite
               : AppColorConstants.colorH1Grey,
-          borderColor: dependencies!.isSwitchOfAuto
+          borderColor: dependencies.isSwitchOfAuto
           // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online   /// Api Into online Offline Status manage
               ? AppColorConstants.colorLightBlue.withOpacity(0.5)
               : AppColorConstants.colorH1.withOpacity(0.5),
           buttonName: "Start Auto Alignment",
-          onPressed: dependencies?.startAutoButtonPressed,
-          buttonColor: dependencies!.isStartDownStream
+          onPressed: dependencies.startAutoButtonPressed,
+          buttonColor: dependencies.isStartDownStream
               ? AppColorConstants.colorLightBlue.withOpacity(0.6)
-              : dependencies!.isSwitchOfAuto
+              : dependencies.isSwitchOfAuto
           // && getDetectedStatusType(ampItem.status) == DetectedStatusType.online ? // Api Into online Offline Status manage
               ? AppColorConstants.colorLightBlue
               : AppColorConstants.colorBackgroundDark,
           fontSize: getSize(16),
         ),
-        if (dependencies?.downStreamAutoAlignmentError != null)
+        if (dependencies.downStreamAutoAlignmentError != null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: CustomPaint(
@@ -242,7 +138,7 @@ class SpectrumBarChart extends StatelessWidget {
                     const SizedBox(width: 5),
                     Flexible(
                       child: AppText(
-                        "${dependencies?.downStreamAutoAlignmentError}",
+                        "${dependencies.downStreamAutoAlignmentError}",
                         style: TextStyle(
                           color: AppColorConstants.colorDarkBlue,
                           fontSize: 12,
@@ -350,7 +246,7 @@ class SpectrumBarChart extends StatelessWidget {
   }
 
   saveRevertButtonOfAutoAlignWidget() {
-    if(dependencies?.saveRevertApiStatusOfAutoAlign == true) {
+    if(dependencies.saveRevertApiStatusOfAutoAlign == true) {
       return const SizedBox(
           height: 85, width: 50, child: AppLoader());
     }
@@ -362,12 +258,12 @@ class SpectrumBarChart extends StatelessWidget {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: dependencies!.isSaveRevertUnable ? null : Colors.grey,
-            borderColor: dependencies!.isSaveRevertUnable ? null : Colors.grey,
+            buttonColor: dependencies.isSaveRevertUnable ? null : Colors.grey,
+            borderColor: dependencies.isSaveRevertUnable ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Save",
             fontSize: 16,
-            onPressed: !dependencies!.isSaveRevertUnable ? null : dependencies?.saveButtonPressed,
+            onPressed: !dependencies.isSaveRevertUnable ? null : dependencies.saveButtonPressed,
             fontFamily: AppAssetsConstants.openSans,
           ),
           const SizedBox(
@@ -377,12 +273,12 @@ class SpectrumBarChart extends StatelessWidget {
             buttonWidth: 80,
             buttonRadius: 8,
             buttonHeight: 32,
-            buttonColor: dependencies!.isSaveRevertUnable ? null : Colors.grey,
-            borderColor: dependencies!.isSaveRevertUnable ? null : Colors.grey,
+            buttonColor: dependencies.isSaveRevertUnable ? null : Colors.grey,
+            borderColor: dependencies.isSaveRevertUnable ? null : Colors.grey,
             padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
             buttonName: "Revert",
             fontSize: 16,
-            onPressed: !dependencies!.isSaveRevertUnable ? null : dependencies?.revertButtonPressed,
+            onPressed: !dependencies.isSaveRevertUnable ? null : dependencies.revertButtonPressed,
             fontFamily: AppAssetsConstants.openSans,
           ),
         ],
