@@ -55,6 +55,8 @@ class InterstageClass extends StatelessWidget {
       tiltMaxVal: manualAlignmentViewDependencies.tiltMaxVal,
       tiltMinVal: manualAlignmentViewDependencies.tiltMinVal,
       updateValue: manualAlignmentViewDependencies.updateValue,
+      lastUpdateColor: manualAlignmentViewDependencies.lastUpdateColor,
+      lastUpdateString: manualAlignmentViewDependencies.lastUpdateString,
     );
   }
 

@@ -52,6 +52,10 @@ class ManualAlignmentPage extends StatefulWidget {
   /// Enable increment and decrement ///
   final VoidCallback updateValue;
 
+  /// For Last update String ///
+  final String lastUpdateString;
+  final Color lastUpdateColor;
+
   ManualAlignmentPage({
     super.key,
     required this.isSwitchOfAuto,
@@ -90,7 +94,11 @@ class ManualAlignmentPage extends StatefulWidget {
     required this.isSaveRevertEnable,
 
     /// Enable increment and decrement ///
-    required this.updateValue
+    required this.updateValue,
+
+    /// For Last update String ///
+    required this.lastUpdateString,
+    required this.lastUpdateColor,
 
   });
 
@@ -103,8 +111,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        (widget.manualAlignmentApiStatus == true // || widget.dsManualAlignmentItem.dsValues.isNotEmpty
-        )
+        (widget.manualAlignmentApiStatus == true) // || widget.dsManualAlignmentItem.dsValues.isNotEmpty
             ? manualAlignmentBody()
             : Container(),
         refreshingBar(),
@@ -114,8 +121,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
 
   //Refreshing Top bar with Error Message and Refresh Button.
   Widget refreshingBar() {
-    final String? errorMessage =
-        widget.manualAlignmentError;
+    final String? errorMessage = widget.manualAlignmentError;
     bool isDesktop = widget.screenLayoutType == AppScreenLayoutType.desktop;
     return Column(
       children: [
@@ -146,21 +152,17 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (widget.manualAlignmentError != null)
+          const SizedBox(width: 10),
         Flexible(
           child: buildLastSeenView(
-              textColor:
-              widget.manualAlignmentError == null
-                  ? AppColorConstants.colorGrn
-                  : AppColorConstants.colorAppbar,
-              messageString:
-              widget.manualAlignmentError != null
-                  ? 'The refresh failed in '
-                  : null),
+              textColor: widget.lastUpdateColor,
+              messageString: widget.lastUpdateString,
+          ),
         ),
         AppRefresh(
           buttonColor: AppColorConstants.colorPrimary,
-          loadingStatus:
-          widget.manualAlignmentApiStatus,
+          loadingStatus: widget.manualAlignmentApiStatus,
           onPressed: () => widget.onRefreshClicked(),
           enabled: widget.isOffline,
         )
@@ -184,7 +186,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
               Column(
                 children: [
                   if(!widget.isSwitchOfAuto) gainAndTiltSettingView(),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -223,7 +225,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
     return Card(color: AppColorConstants.colorWhite,
       elevation: 6,
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==AppScreenLayoutType.mobile?10:30),
+        padding:  EdgeInsets.symmetric(vertical: 20, horizontal: widget.screenLayoutType==AppScreenLayoutType.mobile ? 10:30),
         child: Stack(alignment: Alignment.center,
           children: [
             Column(

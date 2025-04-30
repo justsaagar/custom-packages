@@ -22,12 +22,15 @@ class ManualAlignmentViewDependencies {
   final double tiltValue;
   final bool isSaveRevertEnable;
   final bool manualAlignmentApiStatus;
-  final String manualAlignmentError;
+  final String? manualAlignmentError;
   final double gainMaxVal;
   final double gainMinVal;
   final double tiltMaxVal;
   final double tiltMinVal;
   final VoidCallback updateValue;
+
+  final String lastUpdateString;
+  final Color lastUpdateColor;
 
 
   ManualAlignmentViewDependencies({
@@ -57,5 +60,8 @@ class ManualAlignmentViewDependencies {
     required this.tiltMaxVal,
     required this.tiltMinVal,
     required this.updateValue,
+
+    required this.lastUpdateString,
+    required this.lastUpdateColor,
   });
 }
