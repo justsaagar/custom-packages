@@ -99,30 +99,16 @@ class ManualAlignmentPage extends StatefulWidget {
 }
 
 class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
-  // AlignmentSettingModel settingModel = AlignmentSettingModel.empty();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // settingModel = widget.settingModel;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding:
-      EdgeInsets.symmetric(vertical: getSize(10), horizontal:widget.screenLayoutType==AppScreenLayoutType.mobile ? 0: getSize(20)),
-      decoration: borderViewDecoration,
-      child: Column(
-        children: [
-          (widget.manualAlignmentApiStatus == true
-              // || widget.dsManualAlignmentItem.dsValues.isNotEmpty
-          )
-              ? manualAlignmentBody()
-              : Container(),
-          refreshingBar(),
-        ],
-      ),
+    return Column(
+      children: [
+        (widget.manualAlignmentApiStatus == true // || widget.dsManualAlignmentItem.dsValues.isNotEmpty
+        )
+            ? manualAlignmentBody()
+            : Container(),
+        refreshingBar(),
+      ],
     );
   }
 
@@ -137,7 +123,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (errorMessage != null)
+              if (errorMessage != null && errorMessage.isNotEmpty)
                 Flexible(flex: 5, child: errorMessageView(errorMessage: errorMessage))
               else
                 const Spacer(),
