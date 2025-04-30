@@ -73,10 +73,10 @@ class ManualAlignmentPage extends StatefulWidget {
     required this.tiltErrorMessage,
 
     /// Ds Manual Values Model Variables ///
-    this.gainMinVal = 0,
-    this.tiltMinVal = 0,
-    this.gainMaxVal = 0,
-    this.tiltMaxVal = 0,
+    this.gainMinVal = 0.0,
+    this.tiltMinVal = 0.0,
+    this.gainMaxVal = 0.0,
+    this.tiltMaxVal = 0.0,
     required this.handleButtonPress,
 
     ///  AmplifierConfigurationHelper variable manage ///
@@ -206,7 +206,7 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
                       Padding(
                         padding:
                         EdgeInsets.only(top: (!widget.isSwitchOfAuto) ? 0 : 40),
-                        child: titleText('Amplifier Interstage Values Fine Tuning'),
+                        child: titleText('Amplifier Interstage Values'),
                       ),
                       const SizedBox(height: 60),
 
