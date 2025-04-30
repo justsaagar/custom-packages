@@ -171,7 +171,6 @@ class _ManualAlignmentPageState extends State<ManualAlignmentPage> {
   manualAlignmentBody() {
     return Column(
       children: [
-        widget.buttonView,
         if (!widget.isSwitchOfAuto)
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
