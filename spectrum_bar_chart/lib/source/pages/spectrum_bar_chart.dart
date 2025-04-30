@@ -205,7 +205,7 @@ class SpectrumBarChart extends StatelessWidget {
       children: [
         AppButton(
           buttonRadius: 9,
-          loadingStatus: dependencies!.isStartDownStream ? true : false,
+          loadingStatus: dependencies?.isStartDownStream ?? false,
           buttonHeight: getSize(35),
           buttonWidth: getSize(220),
           fontColor: dependencies!.isSwitchOfAuto
